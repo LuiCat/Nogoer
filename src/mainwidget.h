@@ -3,13 +3,24 @@
 
 #include <QDialog>
 
+#include "chessboardwidget.h"
+
 class MainWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
+
+protected:
+
+    void resizeEvent(QResizeEvent*);
+
+private:
+
+    ChessBoardWidget* widgetChessBoard;
 
 };
 

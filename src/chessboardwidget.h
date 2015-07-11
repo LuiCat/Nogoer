@@ -21,6 +21,8 @@ private:
 
     ChessBoard* board;
 
+    QImage imgBG;
+
 };
 
 #endif // CHESSBOARDWIDGET_H
