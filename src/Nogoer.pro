@@ -18,7 +18,8 @@ HEADERS += \
     luascript.h \
     chessboard.h \
     commondef.h \
-    chessboardwidget.h
+    chessboardwidget.h \
+    clockwidget.h
 
 SOURCES += \
     main.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
     chessscript.cpp \
     luascript.cpp \
     chessboard.cpp \
-    chessboardwidget.cpp
+    chessboardwidget.cpp \
+    clockwidget.cpp
 
 LIBS += $$PWD/lua/lua.a
