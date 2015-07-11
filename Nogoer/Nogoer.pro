@@ -11,8 +11,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Nogoer
 TEMPLATE = app
 
+HEADERS += \
+    mainwidget.h \
+    chessengine.h \
+    chessscript.h \
+    luascript.h
 
-SOURCES += main.cpp\
-        mainwidget.cpp
+SOURCES += \
+    main.cpp \
+    mainwidget.cpp \
+    chessengine.cpp \
+    chessscript.cpp \
+    luascript.cpp
 
-HEADERS  += mainwidget.h
+LIBS += $$PWD/lua/lua.a
