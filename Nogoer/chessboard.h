@@ -16,22 +16,6 @@ public:
         invalid=-1, empty=0, black, white
     };
 
-private:
-
-    struct Grid
-    {
-        int x, y;
-        Grid(int _x=0, int _y=0) : x(_x), y(_y)
-        {
-
-        }
-    };
-
-    ChessType grid[B_HEIGHT][B_WIDTH];
-    bool gameFinished;
-
-public:
-
     explicit ChessBoard(QObject *parent = 0);
 
     void reset();
@@ -67,7 +51,19 @@ signals:
 
     void finished(bool isBlackWin);
 
+private:
 
+    struct Grid
+    {
+        int x, y;
+        Grid(int _x=0, int _y=0) : x(_x), y(_y)
+        {
+
+        }
+    };
+
+    ChessType grid[B_HEIGHT][B_WIDTH];
+    bool gameFinished;
 
 };
 
