@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QtWidgets/QMessageBox>
+
 ChessEngine::ChessEngine(QObject *parent)
     :QObject(parent)
     ,process(0)
@@ -39,8 +40,7 @@ bool ChessEngine::reloadEngine()
     engineName="Engine";
     nameRead=false;
     writeLine("name?");
-    emit nameChanged();
-    //engineType=first?2:1;
+    emit nameChanged(engineName);
     return true;
 }
 
@@ -56,7 +56,7 @@ void ChessEngine::unloadEngine()
         delete process;
         process=0;
     }
-    emit nameChanged();
+    emit nameChanged(getName());
 }
 
 void ChessEngine::writeLine(const QByteArray &line)
@@ -83,29 +83,20 @@ void ChessEngine::start()
 {
     if(!isAvailable())
         return;
-    writeLine("new");
-    writeLine(first?"first":"second");
+    writeLine(first?"newblack":"newwhite");
 }
 
-void ChessEngine::writeMove(int move)
+void ChessEngine::writeMove(int x, int y)
 {
+    if(x<0||x>8||y<0||y>8)
+        return;
     QByteArray l;
     switch(engineType)
     {
-    case 1:
-        l="F=AA\nOK";
-        l[0]=(first?'S':'F');
-        l[2]='A'+idx[move];
-        l[3]='A'+idy[move];
-        writeLine(l);
-        break;
-    case 2:
-        writeLine(QString("#%0").arg(move).toLatin1());
-        break;
     default:
-        l="move AA";
-        l[5]='A'+idx[move];
-        l[6]='A'+idy[move];
+        l="move:00";
+        l[5]='0'+x;
+        l[6]='0'+y;
         writeLine(l);
         break;
     }
@@ -133,59 +124,26 @@ void ChessEngine::dealLine()
                     engineName=line;
                 //qDebug()<<engineName;
                 engineType=0;
-                if(engineName.startsWith("DOGE", Qt::CaseInsensitive))
-                {
-                    engineType=1;
-                }
-                else if(engineName.startsWith("Too Young", Qt::CaseInsensitive))
-                {
-                    engineType=1;
-                }
-                else if(engineName.startsWith("Dotsole", Qt::CaseInsensitive))
-                {
-                    engineType=2;
-                }
             }
             else
             {
                 engineName="Engine";
             }
             nameRead=true;
-            emit nameChanged();
+            emit nameChanged(engineName);
             return;
         }
-        int move=-1,x,y;
-        bool flag;
+        int x,y;
         switch(engineType)
         {
-        case 1:
-            if(line[1]=='=')
-            {
-                x=line[2]-'A';
-                y=line[3]-'A';
-                if(x>=0&&x<11&&y>=0&&y<11)
-                move=xyid[x][y];
-                process->write("OK\n");
-                emit moveChess(move);
-            }
-            break;
-        case 2:
-            x=0;
-            while(x=line.indexOf('#',x),x!=-1)
-            {
-                ++x;
-                y=line.indexOf(' ',x);
-                move=line.mid(x,y-x).toInt(&flag);
-                emit moveChess(move);
-            }
         default:
-            if(line.startsWith("move "))
+            if(line.startsWith("move"))
             {
-                x=line[5]-'A';
-                y=line[6]-'A';
-                if(x>=0&&x<11&&y>=0&&y<11)
-                move=xyid[x][y];
-                emit moveChess(move);
+                x=line[5]-'0';
+                y=line[6]-'0';
+                if(x<0||x>8||y<0||y>8)
+                    break;
+                emit moveChess(x, y);
             }
             break;
         }
