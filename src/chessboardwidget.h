@@ -4,6 +4,7 @@
 #include "chessboard.h"
 
 #include <QWidget>
+#include <QPen>
 
 class ChessBoardWidget : public QWidget
 {
@@ -16,12 +17,19 @@ public:
 protected:
 
     void paintEvent(QPaintEvent*);
+    void resizeEvent(QResizeEvent*);
 
 private:
+
+    static double gridAreaSize;
+    static double gridBorderSpace;
 
     ChessBoard* board;
 
     QImage imgBG;
+
+    QPen penLine;
+    QPen penDot;
 
 };
 

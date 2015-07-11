@@ -20,6 +20,8 @@ protected:
 
 private:
 
+    static int sideMinimumWidth;
+
     ChessBoardWidget* widgetChessBoard;
 
 };

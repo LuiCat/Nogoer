@@ -30,5 +30,3 @@ SOURCES += \
     chessboardwidget.cpp
 
 LIBS += $$PWD/lua/lua.a
-
-FORMS +=
