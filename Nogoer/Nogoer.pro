@@ -15,13 +15,16 @@ HEADERS += \
     mainwidget.h \
     chessengine.h \
     chessscript.h \
-    luascript.h
+    luascript.h \
+    chessboard.h \
+    commondef.h
 
 SOURCES += \
     main.cpp \
     mainwidget.cpp \
     chessengine.cpp \
     chessscript.cpp \
-    luascript.cpp
+    luascript.cpp \
+    chessboard.cpp
 
 LIBS += $$PWD/lua/lua.a

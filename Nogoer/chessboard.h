@@ -1,0 +1,74 @@
+#ifndef CHESSBOARD_H
+#define CHESSBOARD_H
+
+#include <QObject>
+
+#include "commondef.h"
+
+class ChessBoard : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    enum ChessType
+    {
+        invalid=-1, empty=0, black, white
+    };
+
+private:
+
+    struct Grid
+    {
+        int x, y;
+        Grid(int _x=0, int _y=0) : x(_x), y(_y)
+        {
+
+        }
+    };
+
+    ChessType grid[B_HEIGHT][B_WIDTH];
+    bool gameFinished;
+
+public:
+
+    explicit ChessBoard(QObject *parent = 0);
+
+    void reset();
+
+    ChessType getGrid(int x, int y) const;
+    void setGrid(int x, int y, ChessType chess);
+
+    inline bool isEmpty(int x, int y) const
+    {
+        return getGrid(x, y)==empty;
+    }
+
+    inline bool isChess(int x, int y) const
+    {
+        ChessType type=getGrid(x, y);
+        return type==black||type==white;
+    }
+
+    /// Count the life of the block at specified position, returns 0 if no chess is on the position
+    int countLife(int x, int y) const;
+
+    /// Check whether the move is possible (not KO or suicide)
+    bool checkMove(int x, int y, bool isBlack) const;
+
+    bool isFinished() const;
+    bool checkFinished(bool checkBlack);
+
+public slots:
+
+    bool doChess(int x, int y, bool isBlack);
+
+signals:
+
+    void finished(bool isBlackWin);
+
+
+
+};
+
+#endif // CHESSBOARD_H
