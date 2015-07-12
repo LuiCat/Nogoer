@@ -24,12 +24,28 @@ private:
     static double gridAreaSize;
     static double gridBorderSpace;
 
+    static int gridDots[5][2];
+
     ChessBoard* board;
 
-    QImage imgBG;
+    QImage imgBoard;
+    QImage imgChessBlack;
+    QImage imgChessWhite;
 
     QPen penLine;
     QPen penDot;
+
+    double gridTop;
+    double gridBottom;
+    double gridLeft;
+    double gridRight;
+    double gridHeight;
+    double gridWidth;
+    double cellHeight;
+    double cellWidth;
+
+    void drawGrid(QPainter& painter);
+    void drawChess(QPainter& painter);
 
 };
 
