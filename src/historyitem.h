@@ -19,6 +19,11 @@ private:
     int infoHeight;
     int moveHeight;
 
+    QImage imgBlack;
+    QImage imgWhite;
+
+    static QPainterPath makePath(const QSizeF& size, double radiusArc);
+
 };
 
 #endif // HISTORYITEM_H

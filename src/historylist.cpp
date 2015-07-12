@@ -8,12 +8,11 @@ HistoryList::HistoryList(QObject* parent)
 
 }
 
-void HistoryList::append(QString text, int moveNum, int historyID)
+void HistoryList::append(QString text, int stepNum, int gameNum)
 {
     beginInsertRows(QModelIndex(), list.size(), list.size());
 
-    ListData data={text, moveNum, historyID};
-
+    ListData data={text, stepNum, gameNum};
     list.append(data);
 
     endInsertRows();

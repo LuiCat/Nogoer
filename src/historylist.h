@@ -29,7 +29,7 @@ public:
 
 public slots:
 
-    void append(QString text, int moveNum=0, int historyID=-1);
+    void append(QString text, int stepNum=0, int gameNum=0);
 
 private:
 

@@ -21,9 +21,8 @@ HistoryWidget::HistoryWidget(QWidget* parent)
              QScrollBar::sub-line:vertical {subcontrol-origin:margin; height:0px;}\
              QScrollBar::add-line:vertical {subcontrol-origin:margin; height:0px;}");
 
-    for(int i=0;i<123;++i)
-        list->append(QString("Fuck %1 times").arg(i));
-
+    for(int i=0;i<222;++i)
+        list->append(QString("Fuck %1 times").arg(i), i, 1);
 
 }
 
