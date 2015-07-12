@@ -12,13 +12,17 @@ int ChessBoardWidget::gridDots[5][2] = {{2, 2}, {2, 6}, {4, 4}, {6, 2}, {6, 6}};
 ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     :QWidget(parent)
     ,board(chessboard)
+    ,currentX(-1)
+    ,currentY(-1)
 {
     if(!board)
         board=new ChessBoard(this);
 
     imgBoard.load("data/chessboard.png");
-    imgChessBlack.load("data/chessblack.png");
-    imgChessWhite.load("data/chesswhite.png");
+    imgChessBlack[0].load("data/chessblack.png");
+    imgChessWhite[0].load("data/chesswhite.png");
+    imgChessBlack[1].load("data/chessblacks.png");
+    imgChessWhite[1].load("data/chesswhites.png");
 
     penLine.setWidth(2);
     penDot.setWidth(9);
@@ -87,6 +91,7 @@ void ChessBoardWidget::drawChess(QPainter& painter)
         return;
 
     int i,j;
+    bool flag;
 
     painter.translate(gridLeft-cellWidth*0.5, gridTop-cellHeight*0.5);
 
@@ -96,10 +101,11 @@ void ChessBoardWidget::drawChess(QPainter& painter)
         {
             if(!board->isChess(i, j))
                 continue;
+            flag=(i==currentY&&j==currentX);
             painter.save();
             painter.translate(cellWidth*j, cellHeight*i);
             painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
-                              board->getGrid(i, j)==ChessBoard::black?imgChessBlack:imgChessWhite);
+                              board->getGrid(i, j)==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
             painter.restore();
         }
     }

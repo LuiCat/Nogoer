@@ -19,6 +19,8 @@ protected:
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent*);
 
+    void mousePressEvent();
+
 private:
 
     static double gridAreaSize;
@@ -28,9 +30,12 @@ private:
 
     ChessBoard* board;
 
+    int currentX;
+    int currentY;
+
     QImage imgBoard;
-    QImage imgChessBlack;
-    QImage imgChessWhite;
+    QImage imgChessBlack[2];
+    QImage imgChessWhite[2];
 
     QPen penLine;
     QPen penDot;
