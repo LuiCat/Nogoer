@@ -35,6 +35,14 @@ private:
     ChessBoard* chessboard;
     ChessBoardWidget* widgetChessBoard;
 
+    ClockWidget* widgetClockBlack;
+    ClockWidget* widgetClockWhite;
+
+    inline ClockWidget* getClockWidget(bool isBlack)
+    {
+        return isBlack?widgetClockBlack:widgetClockWhite;
+    }
+
     bool doMove(int x, int y);
 
 };

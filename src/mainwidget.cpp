@@ -16,7 +16,12 @@ MainWidget::MainWidget(QWidget *parent)
     chessboard=new ChessBoard(this);
     widgetChessBoard = new ChessBoardWidget(chessboard, this);
 
+    widgetClockBlack = new ClockWidget(this);
+    widgetClockWhite = new ClockWidget(this);
+
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
+
+
 
 }
 
@@ -29,14 +34,18 @@ void MainWidget::resizeEvent(QResizeEvent*)
 {
     int widthCB, heightCB;
     int yCB;
-    int widthSide;
+    int widthLeft, widthRight;
 
     widthCB=width()-sideMinimumWidth*2;
     heightCB=(height()>widthCB?widthCB:(widthCB=height()));
-    widthSide=(width()-widthCB)/2;
+    widthLeft=(width()-widthCB)/2;
+    widthRight=width()-widthCB-widthLeft;
     yCB=(height()-heightCB)/2;
 
-    widgetChessBoard->setGeometry(widthSide, yCB, widthCB, heightCB);
+    widgetChessBoard->setGeometry(widthLeft, yCB, widthCB, heightCB);
+
+    widgetClockBlack->setGeometry(widthLeft+widthCB, 0, widthRight, height()/2);
+    widgetClockWhite->setGeometry(widthLeft+widthCB, height()-height()/2, widthRight, height()/2);
 
 }
 
