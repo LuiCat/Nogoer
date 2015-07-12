@@ -18,7 +18,7 @@ void ChessBoard::reset()
 
 ChessBoard::ChessType ChessBoard::getGrid(int x, int y) const
 {
-    if(x<0||x>B_HEIGHT||y<0||y>B_WIDTH)
+    if(x<0||x>=B_HEIGHT||y<0||y>=B_WIDTH)
         return invalid;
     return grid[x][y];
 }
@@ -35,7 +35,7 @@ int ChessBoard::countLife(int x, int y) const
     bool mark[B_HEIGHT][B_WIDTH];
     memset(mark, 0, sizeof(mark));
 
-    if(getGrid(x, y)!=empty)
+    if(!isChess(x, y))
         return false;
 
     int i,tx,ty,res=0;
@@ -53,7 +53,7 @@ int ChessBoard::countLife(int x, int y) const
             tx=g.x+dx[i];
             ty=g.y+dy[i];
             t=getGrid(tx, ty);
-            if(mark[tx][ty])
+            if(t==invalid||mark[tx][ty])
                 continue;
             mark[tx][ty]=true;
             if(t==chess)

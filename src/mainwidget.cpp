@@ -2,15 +2,21 @@
 
 #include <QKeyEvent>
 #include <QPainter>
+#include <QtWidgets/QMessageBox>
 
 int MainWidget::sideMinimumWidth = 160;
 
 MainWidget::MainWidget(QWidget *parent)
-    : QWidget(parent)
+    :QWidget(parent)
+    ,moveCount(0)
+    ,playerBlack(true)
 {    
     setMinimumSize(800, 480);
 
-    widgetChessBoard = new ChessBoardWidget(0, this);
+    chessboard=new ChessBoard(this);
+    widgetChessBoard = new ChessBoardWidget(chessboard, this);
+
+    connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
 
 }
 
@@ -32,4 +38,28 @@ void MainWidget::resizeEvent(QResizeEvent*)
 
     widgetChessBoard->setGeometry(widthSide, yCB, widthCB, heightCB);
 
+}
+
+void MainWidget::doPlayerMove(int x, int y)
+{
+    if(doMove(x, y))
+        switchSide();
+}
+
+void MainWidget::switchSide()
+{
+    ++moveCount;
+    playerBlack=!playerBlack;
+}
+
+bool MainWidget::doMove(int x, int y)
+{
+    if(!chessboard->checkMove(x, y, playerBlack))
+        return false;
+    widgetChessBoard->doChess(x, y, playerBlack);
+    if(chessboard->checkFinished(!playerBlack))
+    {
+        QMessageBox::information(this, "Game Over", QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));
+    }
+    return true;
 }

@@ -18,11 +18,23 @@ protected:
 
     void resizeEvent(QResizeEvent*);
 
+protected slots:
+
+    void doPlayerMove(int x, int y);
+
+    void switchSide();
+
 private:
 
     static int sideMinimumWidth;
 
+    int moveCount;
+    bool playerBlack;
+
+    ChessBoard* chessboard;
     ChessBoardWidget* widgetChessBoard;
+
+    bool doMove(int x, int y);
 
 };
 
