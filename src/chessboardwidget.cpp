@@ -88,13 +88,16 @@ void ChessBoardWidget::resizeEvent(QResizeEvent*)
 
 void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
 {
-    int cx,cy;
-    QPointF p=e->localPos();
+    if(e->button()==Qt::LeftButton)
+    {
+        int cx,cy;
+        QPointF p=e->localPos();
 
-    cx=qRound((p.x()-gridLeft)/cellWidth);
-    cy=qRound((p.y()-gridTop)/cellHeight);
+        cx=qRound((p.x()-gridLeft)/cellWidth);
+        cy=qRound((p.y()-gridTop)/cellHeight);
 
-    emit clickGrid(cx, cy);
+        emit clickGrid(cx, cy);
+    }
 }
 
 void ChessBoardWidget::drawGrid(QPainter& painter)
