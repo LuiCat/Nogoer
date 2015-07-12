@@ -10,6 +10,12 @@ class HistoryList : public QAbstractListModel
 
 public:
 
+    struct ListData {
+        QString text;
+        int step;
+        int game;
+    };
+
     explicit HistoryList(QObject* parent=0);
 
     int rowCount(const QModelIndex& parent) const;
@@ -27,14 +33,10 @@ public slots:
 
 private:
 
-    struct ListData {
-        QString text;
-        int step;
-        int game;
-    };
-
     QList<ListData> list;
 
 };
+
+Q_DECLARE_METATYPE(const HistoryList::ListData*)
 
 #endif // HISTORYLIST_H

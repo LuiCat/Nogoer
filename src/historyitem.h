@@ -16,7 +16,8 @@ public:
 
 private:
 
-    int cellHeight;
+    int infoHeight;
+    int moveHeight;
 
 };
 

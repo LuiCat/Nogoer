@@ -1,23 +1,30 @@
 #include "historyitem.h"
+#include "historylist.h"
 
 #include <QPainter>
 
 HistoryItem::HistoryItem(QObject* parent)
     :QAbstractItemDelegate(parent)
-    ,cellHeight(30)
+    ,infoHeight(20)
+    ,moveHeight(30)
 {
 
 }
 
 void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QMap<QString, QVariant> map(index.data().toMap());
-    painter->drawRect(option.rect.marginsRemoved(QMargins(2, 2, 2, 2)));
+    const HistoryList::ListData* data=index.data().value<const HistoryList::ListData*>();
+    if(!data)
+        return;
+    painter->fillRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), "#CCFFCC");
     painter->drawText(option.rect.marginsRemoved(QMargins(2, 2, 2, 2)),
-                       Qt::AlignCenter, map.value("text").toString());
+                       Qt::AlignCenter, data->text);
 }
 
-QSize HistoryItem::sizeHint(const QStyleOptionViewItem& option, const QModelIndex&) const
+QSize HistoryItem::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QSize(option.rect.width(), cellHeight);
+    const HistoryList::ListData* data=index.data().value<const HistoryList::ListData*>();
+    if(!data)
+        return QSize();
+    return QSize(option.rect.width(), data->step>0?moveHeight:infoHeight);
 }

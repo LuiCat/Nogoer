@@ -33,11 +33,7 @@ QVariant HistoryList::data(const QModelIndex& index, int role) const
     if (role == Qt::DisplayRole)
     {
         const ListData& data=list.at(index.row());
-        QMap<QString, QVariant> map;
-        map.insert("text", QVariant(data.text));
-        map.insert("step", QVariant(data.step));
-        map.insert("game", QVariant(data.game));
-        return QVariant(map);
+        return QVariant::fromValue(&data);
     }
     return QVariant();
 }
