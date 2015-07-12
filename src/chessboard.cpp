@@ -6,14 +6,18 @@
 ChessBoard::ChessBoard(QObject *parent)
     :QObject(parent)
     ,gameFinished(false)
+    ,nextStepNum(1)
 {
     memset(grid, 0, sizeof(grid));
+    memset(step, 0, sizeof(step));
 }
 
 void ChessBoard::reset()
 {
     memset(grid, 0, sizeof(grid));
+    memset(step, 0, sizeof(step));
     gameFinished=false;
+    nextStepNum=1;
 }
 
 ChessBoard::ChessType ChessBoard::getGrid(int x, int y) const
@@ -23,11 +27,19 @@ ChessBoard::ChessType ChessBoard::getGrid(int x, int y) const
     return grid[x][y];
 }
 
-void ChessBoard::setGrid(int x, int y, ChessBoard::ChessType chess)
+int ChessBoard::getStep(int x, int y) const
+{
+    if(x<0||x>=B_HEIGHT||y<0||y>=B_WIDTH)
+        return 0;
+    return step[x][y];
+}
+
+void ChessBoard::setGrid(int x, int y, ChessBoard::ChessType chess, int stepNum)
 {
     if(x<0||x>B_HEIGHT||y<0||y>B_WIDTH)
         return;
     grid[x][y]=chess;
+    step[x][y]=stepNum;
 }
 
 int ChessBoard::countLife(int x, int y) const
@@ -123,7 +135,8 @@ bool ChessBoard::doChess(int x, int y, bool isBlack)
 {
     if(!isEmpty(x, y)||gameFinished)
         return false;
-    setGrid(x, y, isBlack?black:white);
+    setGrid(x, y, isBlack?black:white, nextStepNum);
+    ++nextStepNum;
     return true;
 }
 

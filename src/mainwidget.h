@@ -5,6 +5,7 @@
 
 #include "chessboardwidget.h"
 #include "clockwidget.h"
+#include "historywidget.h"
 
 class MainWidget : public QWidget
 {
@@ -28,6 +29,7 @@ protected slots:
 private:
 
     static int sideMinimumWidth;
+    static int controlPanelHeight;
 
     int moveCount;
     bool playerBlack;
@@ -37,6 +39,8 @@ private:
 
     ClockWidget* widgetClockBlack;
     ClockWidget* widgetClockWhite;
+
+    HistoryWidget* widgetHistory;
 
     inline ClockWidget* getClockWidget(bool isBlack)
     {

@@ -20,6 +20,9 @@ public:
     /// Restore with empty parameter or set to null.
     void showChessBoard(ChessBoard* chessboard=0);
 
+    /// Show history moves until given steps, set to 0 to clear history.
+    void showHistory(int step=0);
+
 public slots:
 
     void doChess(int x, int y, bool isBlack);
@@ -47,6 +50,8 @@ private:
 
     int currentX;
     int currentY;
+
+    int historyStep;
 
     QImage imgBoard;
     QImage imgChessBlack[2];

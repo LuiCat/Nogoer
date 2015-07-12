@@ -21,7 +21,8 @@ public:
     void reset();
 
     ChessType getGrid(int x, int y) const;
-    void setGrid(int x, int y, ChessType chess);
+    int getStep(int x, int y) const;
+    void setGrid(int x, int y, ChessType chess, int stepNum=0);
 
     inline bool isEmpty(int x, int y) const
     {
@@ -64,6 +65,9 @@ private:
 
     ChessType grid[B_HEIGHT][B_WIDTH];
     bool gameFinished;
+
+    int step[B_HEIGHT][B_WIDTH];
+    int nextStepNum;
 
 };
 

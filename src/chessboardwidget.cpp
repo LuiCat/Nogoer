@@ -16,6 +16,7 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     ,showBoard(0)
     ,currentX(-1)
     ,currentY(-1)
+    ,historyStep(0)
 {
     if(!board)
         board=new ChessBoard(this);
@@ -44,6 +45,11 @@ void ChessBoardWidget::showChessBoard(ChessBoard* chessboard)
 {
     showBoard=(chessboard?chessboard:board);
     update();
+}
+
+void ChessBoardWidget::showHistory(int step)
+{
+    historyStep=step;
 }
 
 void ChessBoardWidget::doChess(int x, int y, bool isBlack)
@@ -126,9 +132,11 @@ void ChessBoardWidget::drawChess(QPainter& painter)
     if(!board)
         return;
 
-    int i,j;
+    int i,j,step;
     bool flag;
+    ChessBoard::ChessType type;
 
+    painter.setFont(QFont("arial", cellHeight*0.35));
     painter.translate(gridLeft-cellWidth*0.5, gridTop-cellHeight*0.5);
 
     for(i=0;i<B_HEIGHT;++i)
@@ -137,11 +145,20 @@ void ChessBoardWidget::drawChess(QPainter& painter)
         {
             if(!board->isChess(i, j))
                 continue;
+            step=board->getStep(i, j);
+            type=board->getGrid(i, j);
             flag=(i==currentX&&j==currentY);
             painter.save();
             painter.translate(cellWidth*i, cellHeight*j);
+            if(historyStep>0&&historyStep<step)
+                painter.setOpacity(0.2);
             painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
-                              board->getGrid(i, j)==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
+                              type==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
+            if(historyStep>=step)
+            {
+                painter.setPen(type==ChessBoard::black?"white":"black");
+                painter.drawText(QRectF(0, 0, cellWidth, cellHeight), Qt::AlignCenter, QString("%0").arg(step));
+            }
             painter.restore();
         }
     }

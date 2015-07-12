@@ -19,7 +19,10 @@ HEADERS += \
     chessboard.h \
     commondef.h \
     chessboardwidget.h \
-    clockwidget.h
+    clockwidget.h \
+    historywidget.h \
+    historyitem.h \
+    historylist.h
 
 SOURCES += \
     main.cpp \
@@ -29,6 +32,9 @@ SOURCES += \
     luascript.cpp \
     chessboard.cpp \
     chessboardwidget.cpp \
-    clockwidget.cpp
+    clockwidget.cpp \
+    historywidget.cpp \
+    historyitem.cpp \
+    historylist.cpp
 
 LIBS += $$PWD/lua/lua.a

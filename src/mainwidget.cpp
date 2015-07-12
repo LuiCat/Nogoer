@@ -5,6 +5,7 @@
 #include <QtWidgets/QMessageBox>
 
 int MainWidget::sideMinimumWidth = 160;
+int MainWidget::controlPanelHeight = 100;
 
 MainWidget::MainWidget(QWidget *parent)
     :QWidget(parent)
@@ -13,14 +14,15 @@ MainWidget::MainWidget(QWidget *parent)
 {
     setMinimumSize(800, 480);
 
-    chessboard=new ChessBoard(this);
+    chessboard = new ChessBoard(this);
     widgetChessBoard = new ChessBoardWidget(chessboard, this);
 
     widgetClockBlack = new ClockWidget(this);
     widgetClockWhite = new ClockWidget(this);
 
-    connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
+    widgetHistory = new HistoryWidget(this);
 
+    connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
 
 
 }
@@ -46,6 +48,8 @@ void MainWidget::resizeEvent(QResizeEvent*)
 
     widgetClockBlack->setGeometry(widthLeft+widthCB, 0, widthRight, height()/2);
     widgetClockWhite->setGeometry(widthLeft+widthCB, height()-height()/2, widthRight, height()/2);
+
+    widgetHistory->setGeometry(0, 0, widthLeft+10, height()-controlPanelHeight);
 
 }
 
