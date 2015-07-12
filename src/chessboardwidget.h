@@ -14,12 +14,26 @@ public:
 
     explicit ChessBoardWidget(ChessBoard* chessboard=0, QWidget *parent=0);
 
+    ChessBoard* getChessBoard() const;
+
+    /// Show a chessboard to screen not making modifies to origin chessboard.
+    /// Restore with empty parameter or set to null.
+    void showChessBoard(ChessBoard* chessboard=0);
+
+public slots:
+
+    void doChess(int x, int y, bool isBlack);
+
+signals:
+
+    void clickGrid(int x, int y);
+
 protected:
 
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent*);
 
-    void mousePressEvent();
+    void mousePressEvent(QMouseEvent* e);
 
 private:
 
@@ -29,6 +43,7 @@ private:
     static int gridDots[5][2];
 
     ChessBoard* board;
+    ChessBoard* showBoard;
 
     int currentX;
     int currentY;

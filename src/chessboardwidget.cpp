@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QImage>
+#include <QKeyEvent>
 
 double ChessBoardWidget::gridAreaSize = 0.8;
 double ChessBoardWidget::gridBorderSpace = 5.0;
@@ -12,11 +13,13 @@ int ChessBoardWidget::gridDots[5][2] = {{2, 2}, {2, 6}, {4, 4}, {6, 2}, {6, 6}};
 ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     :QWidget(parent)
     ,board(chessboard)
+    ,showBoard(0)
     ,currentX(-1)
     ,currentY(-1)
 {
     if(!board)
         board=new ChessBoard(this);
+    showBoard=board;
 
     imgBoard.load("data/chessboard.png");
     imgChessBlack[0].load("data/chessblack.png");
@@ -30,6 +33,25 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
 
     setMinimumSize(200, 200);
 
+}
+
+ChessBoard* ChessBoardWidget::getChessBoard() const
+{
+    return board;
+}
+
+void ChessBoardWidget::showChessBoard(ChessBoard* chessboard)
+{
+    showBoard=(chessboard?chessboard:board);
+    update();
+}
+
+void ChessBoardWidget::doChess(int x, int y, bool isBlack)
+{
+    board->doChess(x, y, isBlack);
+    currentX=x;
+    currentY=y;
+    showChessBoard();
 }
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)
@@ -62,6 +84,17 @@ void ChessBoardWidget::resizeEvent(QResizeEvent*)
     cellWidth=gridWidth/(B_WIDTH-1);
 
     update();
+}
+
+void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
+{
+    int cx,cy;
+    QPointF p=e->localPos();
+
+    cx=qRound((p.x()-gridLeft)/cellWidth);
+    cy=qRound((p.y()-gridTop)/cellHeight);
+
+    emit clickGrid(cx, cy);
 }
 
 void ChessBoardWidget::drawGrid(QPainter& painter)
@@ -101,9 +134,9 @@ void ChessBoardWidget::drawChess(QPainter& painter)
         {
             if(!board->isChess(i, j))
                 continue;
-            flag=(i==currentY&&j==currentX);
+            flag=(i==currentX&&j==currentY);
             painter.save();
-            painter.translate(cellWidth*j, cellHeight*i);
+            painter.translate(cellWidth*i, cellHeight*j);
             painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
                               board->getGrid(i, j)==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
             painter.restore();
@@ -111,4 +144,3 @@ void ChessBoardWidget::drawChess(QPainter& painter)
     }
 
 }
-
