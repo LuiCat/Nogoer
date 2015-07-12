@@ -11,6 +11,9 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
     timer.setInterval(16);
     connect(&timer, SIGNAL(timeout()), this, SLOT(nextSecond()));
 
+    aboutEngine = new QPushButton("LoadEngin", this);
+    aboutEngine->setGeometry(width() - 70, height() + 40, 90, 30);
+    connect(aboutEngine, SIGNAL(clicked()), this, SLOT(engineLoading()));
 }
 
 void ClockWidget::timeStart()
@@ -42,6 +45,21 @@ void ClockWidget::timeClear()
     update();
 }
 
+bool ClockWidget::isLoadEngine()
+{
+    return engineLoaded;
+}
+
+void ClockWidget::setEngineState(bool tBool)
+{
+    engineLoaded = tBool;
+}
+
+void ClockWidget::setPlayerName(QString tString)
+{
+    playerName = tString;
+}
+
 QString ClockWidget::strTime()
 {
     QString tmpTim;
@@ -71,8 +89,9 @@ int ClockWidget::getNowTime()
 void ClockWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.drawText(QPoint(15, 20), strTime());
-    painter.drawRect(0, 0, 100, 100);
+    painter.drawText(QPoint(width() - 120, height() - 105), playerName);
+    painter.drawText(QPoint(width() - 120, height() - 60), strTime());
+    painter.drawRect(10, 10, width() - 20, height() - 20);
 }
 
 void ClockWidget::resizeEvent(QResizeEvent *)
@@ -83,4 +102,14 @@ void ClockWidget::resizeEvent(QResizeEvent *)
 void ClockWidget::nextSecond()
 {
     update();
+}
+
+void ClockWidget::engineLoading()
+{
+    if (engineLoaded)
+    {
+        emit unloadEngine();
+    }
+    else
+        emit loadEngine();
 }
