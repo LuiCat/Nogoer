@@ -12,8 +12,10 @@ class ClockWidget : public QWidget
 private:
     QTime time;
     QTimer timer;
-    QPushButton *aboutEngine;
+    QPushButton* loadEngineButton;
+    QPushButton* showLogButton;
     QString playerName;
+    QString outString;
     int allPauseTime, pauseTime, nowTime;
     bool isStop, isClear, thisStart;
     bool engineLoaded;
@@ -26,12 +28,13 @@ public:
     void timeClear();
     void timeStop();
     bool isLoadEngine();
-    void setEngineState(bool);
-    void setPlayerName(QString tString = "Robot");
+    void setEngineState(bool isEngine, QString name);
+    void setPlayerName(QString tString);
     // ClockWidget interface
 signals:
     void loadEngine();
     void unloadEngine();
+    void showLog();
 public slots:
     void nextSecond();
     void engineLoading();

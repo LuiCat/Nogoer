@@ -5,15 +5,18 @@
 
 ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
 {
+    setPlayerName("Player");
     allPauseTime = pauseTime = 0;
     thisStart = isStop = isClear = false;
 
-    timer.setInterval(16);
+    timer.setInterval(500);
     connect(&timer, SIGNAL(timeout()), this, SLOT(nextSecond()));
 
-    aboutEngine = new QPushButton("LoadEngin", this);
-    aboutEngine->setGeometry(width() - 70, height() + 40, 90, 30);
-    connect(aboutEngine, SIGNAL(clicked()), this, SLOT(engineLoading()));
+    loadEngineButton = new QPushButton("LoadEngine", this);
+    connect(loadEngineButton, SIGNAL(clicked()), this, SLOT(engineLoading()));
+
+    showLogButton = new QPushButton("ShowLog", this);
+    connect(showLogButton, SIGNAL(clicked()), this, SIGNAL(showLog()));
 }
 
 void ClockWidget::timeStart()
@@ -34,6 +37,7 @@ void ClockWidget::timeStop()
     timer.stop();
     nowTime = getNowTime();
     isStop = true;
+    update();
 }
 
 void ClockWidget::timeClear()
@@ -50,9 +54,20 @@ bool ClockWidget::isLoadEngine()
     return engineLoaded;
 }
 
-void ClockWidget::setEngineState(bool tBool)
+void ClockWidget::setEngineState(bool isEngine, QString name)
 {
-    engineLoaded = tBool;
+    engineLoaded = isEngine;
+    if (isEngine)
+    {
+        playerName = name;
+        loadEngineButton->setText("UnloadEngine");
+    }
+    else
+    {
+        loadEngineButton->setText("LoadEngine");
+        playerName = QString("Player");
+    }
+    update();
 }
 
 void ClockWidget::setPlayerName(QString tString)
@@ -64,15 +79,14 @@ QString ClockWidget::strTime()
 {
     QString tmpTim;
     int tmpTime;
-    int showH, showM, showS, showMs;
+    int showM, showS, showMs;
     tmpTime = getNowTime();
 
-    showH = tmpTime / 1000 / 60 / 60;
-    showM = tmpTime / 1000 / 60 - showH * 60;
-    showS = tmpTime / 1000 - showH * 60 * 60 - showM * 60;
-    showMs = tmpTime - showH * 60 * 60 * 1000 - showM * 60 * 1000 - showS * 1000;
+    showM = tmpTime / 1000 / 60;
+    showS = tmpTime / 1000 - showM * 60;
+    showMs = tmpTime - showM * 60 * 1000 - showS * 1000;
 
-    tmpTim.sprintf("%02d:%02d:%02d:%03d", showH, showM, showS, showMs);
+    tmpTim.sprintf("%d:%02d:%03d", showM, showS, showMs);
 
     return tmpTim;
 }
@@ -89,8 +103,11 @@ int ClockWidget::getNowTime()
 void ClockWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.drawText(QPoint(width() - 120, height() - 105), playerName);
-    painter.drawText(QPoint(width() - 120, height() - 60), strTime());
+    outString = strTime();
+    loadEngineButton->setGeometry((width() - 110) / 2, (height() - 30) / 2 + 20, 110, 30);
+    showLogButton->setGeometry((width() - 80) / 2, (height() - 30) / 2 + 45, 80, 30);
+    painter.drawText(QPoint((width() - playerName.length() * 7) / 2, (height()) / 2), playerName);
+    painter.drawText(QPoint((width() - outString.length() * 7) / 2, (height() - 50) / 2), outString);
     painter.drawRect(10, 10, width() - 20, height() - 20);
 }
 

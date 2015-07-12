@@ -24,7 +24,6 @@ MainWidget::MainWidget(QWidget *parent)
 
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
 
-
 }
 
 MainWidget::~MainWidget()
