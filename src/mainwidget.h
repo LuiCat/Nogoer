@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "chessboardwidget.h"
+#include "clockwidget.h"
 
 class MainWidget : public QWidget
 {

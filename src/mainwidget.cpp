@@ -10,7 +10,7 @@ MainWidget::MainWidget(QWidget *parent)
     :QWidget(parent)
     ,moveCount(0)
     ,playerBlack(true)
-{    
+{
     setMinimumSize(800, 480);
 
     chessboard=new ChessBoard(this);
