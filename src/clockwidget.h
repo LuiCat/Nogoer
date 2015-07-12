@@ -7,19 +7,29 @@
 
 class ClockWidget : public QWidget
 {
-    QTime *time;
-    QTimer *timer;
     Q_OBJECT
+private:
+    QTime time;
+    QTimer timer;
+    int allPauseTime, pauseTime, nowTime;
+    bool isStop, isClear, thisStart;
+
+    QString strTime();
+    int getNowTime();
 public:
     explicit ClockWidget(QWidget *parent = 0);
-
+    void timeStart();
+    void timeClear();
+    void timeStop();
 signals:
 
 public slots:
-    void nextUpdate();
+    void nextSecond();
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
+    // QWidget interface
 };
 
 #endif // CLOCKWIDGET_H

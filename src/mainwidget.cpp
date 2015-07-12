@@ -7,7 +7,7 @@ int MainWidget::sideMinimumWidth = 160;
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
-{    
+{
     setMinimumSize(800, 480);
 
     widgetChessBoard = new ChessBoardWidget(0, this);
