@@ -104,6 +104,9 @@ private:
 
     bool doMove(int x, int y);
 
+    void playerBegin(bool isBlack);
+    void playerEnd(bool isBlack);
+
     //QPushButton *t1, *t2, *t3;
 
 };

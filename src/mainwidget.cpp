@@ -71,6 +71,8 @@ void MainWidget::restartGame()
     ++gameCount;
     moveCount=0;
     playerBlack=true;
+    if(engineBlack)engineBlack->reloadEngine();
+    if(engineWhite)engineWhite->reloadEngine();
     historyBoard.insert(gameCount, chessboard);
     widgetChessBoard->setChessBoard(chessboard);
     widgetHistory->pushHistory("Game Started");
@@ -78,15 +80,19 @@ void MainWidget::restartGame()
     gameStarted=true;
     widgetClockBlack->timeClear();
     widgetClockWhite->timeClear();
-    widgetClockBlack->timeStart();
+    playerBegin(playerBlack);
+    if(engineBlack)engineBlack->writeLine("newblack");
+    if(engineWhite)engineWhite->writeLine("newwhite");
 }
 
 void MainWidget::stopGame()
 {
     if(!gameStarted)
         return;
-    widgetClockBlack->timeStop();
-    widgetClockWhite->timeStop();
+    if(engineBlack)engineBlack->unloadEngine();
+    if(engineWhite)engineWhite->unloadEngine();
+    playerEnd(!playerBlack);
+    playerEnd(playerBlack);
     gameStarted=false;
     widgetControl->setGameState(false);
     widgetHistory->pushHistory("Game Stopped");
@@ -110,14 +116,14 @@ void MainWidget::setGuide(bool enable)
 
 void MainWidget::loadEngineBlack()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe);;All Files (*)");
     if(!path.isNull())
         loadEngineBlack(path);
 }
 
 void MainWidget::loadEngineWhite()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe);;All Files (*)");
     if(!path.isNull())
         loadEngineWhite(path);
 }
@@ -222,10 +228,14 @@ void MainWidget::onEngineExit(bool isCrash)
 
 void MainWidget::onEngineBlackMove(int x, int y)
 {
-    if(gameStarted&&playerBlack)
+    if(!gameStarted)
+        return;
+    if(playerBlack)
     {
         if(doMove(x, y))
+        {
             switchSide();
+        }
         else
         {
             widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
@@ -236,10 +246,14 @@ void MainWidget::onEngineBlackMove(int x, int y)
 
 void MainWidget::onEngineWhiteMove(int x, int y)
 {
-    if(gameStarted&&!playerBlack)
+    if(!gameStarted)
+        return;
+    if(!playerBlack)
     {
         if(doMove(x, y))
+        {
             switchSide();
+        }
         else
         {
             widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
@@ -250,7 +264,9 @@ void MainWidget::onEngineWhiteMove(int x, int y)
 
 void MainWidget::doPlayerMove(int x, int y)
 {
-    if(gameStarted&&doMove(x, y))
+    if(!gameStarted)
+        return;
+    if((playerBlack?engineBlack:engineWhite)==0&&doMove(x, y))
         switchSide();
 }
 
@@ -258,10 +274,10 @@ void MainWidget::switchSide()
 {
     if(!gameStarted)
         return;
-    (playerBlack?widgetClockBlack:widgetClockWhite)->timeStop();
+    playerEnd(playerBlack);
     ++moveCount;
     playerBlack=!playerBlack;
-    (playerBlack?widgetClockBlack:widgetClockWhite)->timeStart();
+    playerBegin(playerBlack);
 }
 
 void MainWidget::doShowHistory(int gameNum, int stepNum)
@@ -284,5 +300,21 @@ bool MainWidget::doMove(int x, int y)
         stopGame();
         QMessageBox::information(this, "Game Over", QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));
     }
+    else
+    {
+        ChessEngine* engine=(playerBlack?engineWhite:engineBlack);
+        if(engine)engine->writeMove(x, y);
+    }
     return true;
+}
+
+void MainWidget::playerBegin(bool isBlack)
+{
+    (isBlack?widgetClockBlack:widgetClockWhite)->timeStart();
+    widgetChessBoard->setHint((isBlack?engineBlack:engineWhite)==0);
+}
+
+void MainWidget::playerEnd(bool isBlack)
+{
+    (isBlack?widgetClockBlack:widgetClockWhite)->timeStop();
 }
