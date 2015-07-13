@@ -22,7 +22,8 @@ HEADERS += \
     clockwidget.h \
     historywidget.h \
     historyitem.h \
-    historylist.h
+    historylist.h \
+    controlwidget.h
 
 SOURCES += \
     main.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
     clockwidget.cpp \
     historywidget.cpp \
     historyitem.cpp \
-    historylist.cpp
+    historylist.cpp \
+    controlwidget.cpp
 
 LIBS += $$PWD/lua/lua.a
