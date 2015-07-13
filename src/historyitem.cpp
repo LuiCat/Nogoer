@@ -20,6 +20,7 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
     if(!data) return;
     if(data->game>0)
     {
+        bool isBlack=data->step%2;
         if(option.state&QStyle::State_HasFocus)
         {
             painter->fillRect(option.rect, "#FFDD88");
@@ -27,9 +28,9 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
         painter->translate(option.rect.topLeft());
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
-        painter->setBrush(QBrush(data->step%2?"#FFFFCC":"#EECCFF"));
+        painter->setBrush(QBrush(isBlack?"#EECCFF":"#FFFFCC"));
         QRectF rect;
-        if(data->step%2==0)
+        if(isBlack)
         {
             painter->translate(moveHeight*1.5, moveHeight*0.5);
             rect=QRectF(moveHeight*1.5, 0, option.rect.width()-moveHeight*2.0, moveHeight);
@@ -43,7 +44,7 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
         painter->drawPath(makePath(rect.size(), 6));
         painter->restore();
         painter->drawText(rect, Qt::AlignCenter, data->text);
-        if(data->step%2==0)
+        if(isBlack)
         {
             QRectF rch(0, 0, moveHeight, moveHeight);
             painter->drawImage(rch, imgBlack);
