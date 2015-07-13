@@ -7,6 +7,7 @@
 #include "clockwidget.h"
 #include "historywidget.h"
 #include "controlwidget.h"
+#include "showlogwidget.h"
 
 class MainWidget : public QWidget
 {

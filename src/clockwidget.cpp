@@ -104,8 +104,8 @@ void ClockWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     outString = strTime();
-    loadEngineButton->setGeometry((width() - 110) / 2, (height() - 30) / 2 + 20, 110, 30);
-    showLogButton->setGeometry((width() - 80) / 2, (height() - 30) / 2 + 45, 80, 30);
+    loadEngineButton->setGeometry((width() - 110) / 2, (height() - 20) / 2 + 20, 110, 20);
+    showLogButton->setGeometry((width() - 80) / 2, (height() - 20) / 2 + 45, 80, 20);
     painter.drawText(QPoint((width() - playerName.length() * 7) / 2, (height()) / 2), playerName);
     painter.drawText(QPoint((width() - outString.length() * 7) / 2, (height() - 50) / 2), outString);
     painter.setPen("brown");
