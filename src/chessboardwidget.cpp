@@ -80,11 +80,13 @@ void ChessBoardWidget::doChess(int x, int y, bool isBlack)
 void ChessBoardWidget::setHint(bool enable)
 {
     showHint=enable;
+    update();
 }
 
 void ChessBoardWidget::setGuide(bool enable)
 {
     showGuide=enable;
+    update();
 }
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)

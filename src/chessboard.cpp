@@ -114,6 +114,11 @@ bool ChessBoard::checkMove(int x, int y, bool isBlack) const
     return !(flagKO||flagSC);
 }
 
+void ChessBoard::setFinished()
+{
+    gameFinished=true;
+}
+
 bool ChessBoard::isFinished() const
 {
     return gameFinished;

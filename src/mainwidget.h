@@ -19,21 +19,36 @@ public:
     explicit MainWidget(QWidget *parent = 0);
     ~MainWidget();
 
-protected:
+public slots:
 
-    void resizeEvent(QResizeEvent*);
+    void restartGame();
+    void stopGame();
 
-protected slots:
+    void loadScript();
+    void loadScript(QString path);
+
+    void setGuide(bool enable);
+
+    void loadEngineBlack();
+    void loadEngineWhite();
+    void loadEngineBlack(QString path);
+    void loadEngineWhite(QString path);
 
     void doPlayerMove(int x, int y);
     void switchSide();
 
     void doShowHistory(int gameNum, int stepNum);
 
+protected:
+
+    void resizeEvent(QResizeEvent*);
+
 private:
 
     static int sideMinimumWidth;
     static int controlPanelHeight;
+
+    bool gameStarted;
 
     int gameCount;
     int moveCount;

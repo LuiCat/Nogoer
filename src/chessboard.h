@@ -41,6 +41,7 @@ public:
     /// Check whether the move is possible (not KO or suicide)
     bool checkMove(int x, int y, bool isBlack) const;
 
+    void setFinished();
     bool isFinished() const;
     bool checkFinished(bool checkBlack);
 

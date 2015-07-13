@@ -9,6 +9,7 @@ int MainWidget::controlPanelHeight = 100;
 
 MainWidget::MainWidget(QWidget *parent)
     :QWidget(parent)
+    ,gameStarted(false)
     ,gameCount(0)
     ,moveCount(0)
     ,playerBlack(true)
@@ -27,14 +28,76 @@ MainWidget::MainWidget(QWidget *parent)
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
     connect(widgetHistory, SIGNAL(showHistory(int, int)), this, SLOT(doShowHistory(int, int)));
 
-    chessboard = new ChessBoard(this);
-    ++gameCount;
-    historyBoard.insert(gameCount, chessboard);
-    widgetChessBoard->setChessBoard(chessboard);
+    connect(widgetControl, SIGNAL(startGame()), this, SLOT(restartGame()));
+    connect(widgetControl, SIGNAL(stopGame()), this, SLOT(stopGame()));
+    connect(widgetControl, SIGNAL(loadScript()), this, SLOT(loadScript()));
+    connect(widgetControl, SIGNAL(setGuide(bool)), this, SLOT(setGuide(bool)));
 
 }
 
 MainWidget::~MainWidget()
+{
+
+}
+
+void MainWidget::restartGame()
+{
+    chessboard = new ChessBoard(this);
+    ++gameCount;
+    playerBlack=true;
+    historyBoard.insert(gameCount, chessboard);
+    widgetChessBoard->setChessBoard(chessboard);
+    widgetHistory->pushHistory("Game Started");
+    widgetControl->setGameState(true);
+    gameStarted=true;
+    widgetClockBlack->timeClear();
+    widgetClockWhite->timeClear();
+    widgetClockBlack->timeStart();
+}
+
+void MainWidget::stopGame()
+{
+    if(!gameStarted)
+        return;
+    widgetClockBlack->timeStop();
+    widgetClockWhite->timeStop();
+    gameStarted=false;
+    widgetControl->setGameState(false);
+    widgetHistory->pushHistory("Game Stopped");
+    chessboard->setFinished();
+}
+
+void MainWidget::loadScript()
+{
+
+}
+
+void MainWidget::loadScript(QString path)
+{
+
+}
+
+void MainWidget::setGuide(bool enable)
+{
+    widgetChessBoard->setGuide(enable);
+}
+
+void MainWidget::loadEngineBlack()
+{
+
+}
+
+void MainWidget::loadEngineWhite()
+{
+
+}
+
+void MainWidget::loadEngineBlack(QString path)
+{
+
+}
+
+void MainWidget::loadEngineWhite(QString path)
 {
 
 }
@@ -70,8 +133,10 @@ void MainWidget::doPlayerMove(int x, int y)
 
 void MainWidget::switchSide()
 {
+    (playerBlack?widgetClockBlack:widgetClockWhite)->timeStop();
     ++moveCount;
     playerBlack=!playerBlack;
+    (playerBlack?widgetClockBlack:widgetClockWhite)->timeStart();
 }
 
 void MainWidget::doShowHistory(int gameNum, int stepNum)
@@ -91,6 +156,7 @@ bool MainWidget::doMove(int x, int y)
     widgetHistory->pushHistory(QString().sprintf("%c%d", 'A'+y, x), moveCount+1, gameCount);
     if(chessboard->checkFinished(!playerBlack))
     {
+        stopGame();
         QMessageBox::information(this, "Game Over", QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));
     }
     return true;

@@ -9,7 +9,7 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
     allPauseTime = pauseTime = 0;
     thisStart = isStop = isClear = false;
 
-    timer.setInterval(500);
+    timer.setInterval(16);
     connect(&timer, SIGNAL(timeout()), this, SLOT(nextSecond()));
 
     loadEngineButton = new QPushButton("LoadEngine", this);
@@ -21,6 +21,8 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
 
 void ClockWidget::timeStart()
 {
+    if(!isStop)
+        return;
     isStop = isClear = false;
     if (!thisStart)
     {
@@ -33,6 +35,8 @@ void ClockWidget::timeStart()
 
 void ClockWidget::timeStop()
 {
+    if(isStop)
+        return;
     pauseTime = time.elapsed();
     timer.stop();
     nowTime = getNowTime();
