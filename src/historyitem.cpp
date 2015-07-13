@@ -20,6 +20,10 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
     if(!data) return;
     if(data->game>0)
     {
+        if(option.state&QStyle::State_HasFocus)
+        {
+            painter->fillRect(option.rect, "#FFDD88");
+        }
         painter->translate(option.rect.topLeft());
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
@@ -67,11 +71,6 @@ QSize HistoryItem::sizeHint(const QStyleOptionViewItem& option, const QModelInde
     const HistoryList::ListData* data=index.data().value<const HistoryList::ListData*>();
     if(!data) return QSize();
     return QSize(option.rect.width(), data->game>0?moveHeight:infoHeight);
-}
-
-void HistoryItem::setCurrentIndex(const QModelIndex& index)
-{
-    currentIndex=index;
 }
 
 QPainterPath HistoryItem::makePath(const QSizeF& size, double radiusArc)

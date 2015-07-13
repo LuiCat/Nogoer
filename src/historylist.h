@@ -2,7 +2,7 @@
 #define HISTORYLIST_H
 
 #include <QAbstractListModel>
-#include <QList>
+#include <QVector>
 
 class HistoryList : public QAbstractListModel
 {
@@ -27,13 +27,15 @@ public:
         return *this;
     }
 
+    const ListData& getHistoryData(int row);
+
 public slots:
 
     void append(QString text, int stepNum=0, int gameNum=0);
 
 private:
 
-    QList<ListData> list;
+    QVector<ListData> list;
 
 };
 

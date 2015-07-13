@@ -27,7 +27,7 @@ HistoryWidget::HistoryWidget(QWidget* parent)
     for(int i=1;i<222;++i)
         list->append(QString("Shen %0 Hao").arg(i), i, 1);
 
-    connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(onMousePress));
+    connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(onSelectItem(QModelIndex)));
 
 }
 
@@ -36,8 +36,12 @@ void HistoryWidget::resizeEvent(QResizeEvent*)
     view->setGeometry(rect().marginsRemoved(QMargins(10, 10, 10, 10)));
 }
 
-void HistoryWidget::onMousePress(QModelIndex index)
+void HistoryWidget::onSelectItem(QModelIndex index)
 {
-    item->setCurrentIndex(index);
+    const HistoryList::ListData& data=list->getHistoryData(index.row());
+    if(data.game>0&&data.step>0)
+    {
+        emit showHistory(data.game, data.step);
+    }
 }
 

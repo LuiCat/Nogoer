@@ -36,3 +36,8 @@ QVariant HistoryList::data(const QModelIndex& index, int role) const
     }
     return QVariant();
 }
+
+const HistoryList::ListData&HistoryList::getHistoryData(int row)
+{
+    return list.at(row);
+}

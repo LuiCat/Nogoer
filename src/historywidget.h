@@ -21,7 +21,11 @@ protected:
 
 protected slots:
 
-    void onMousePress(QModelIndex index);
+    void onSelectItem(QModelIndex index);
+
+signals:
+
+    void showHistory(int gameNum, int stepNum);
 
 private:
 
