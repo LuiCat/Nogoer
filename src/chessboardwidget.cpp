@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QImage>
 #include <QKeyEvent>
+#include <QDebug>
 
 double ChessBoardWidget::gridAreaSize = 0.8;
 double ChessBoardWidget::gridBorderSpace = 5.0;
@@ -16,7 +17,10 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     ,showBoard(0)
     ,currentX(-1)
     ,currentY(-1)
+    ,mouseX(-1)
+    ,mouseY(-1)
     ,historyStep(0)
+    ,isNextBlack(true)
 {
     if(!board)
         board=new ChessBoard(this);
@@ -33,6 +37,8 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     penDot.setCapStyle(Qt::RoundCap);
 
     setMinimumSize(200, 200);
+
+    setMouseTracking(true);
 
 }
 
@@ -58,6 +64,7 @@ void ChessBoardWidget::doChess(int x, int y, bool isBlack)
     currentX=x;
     currentY=y;
     showChessBoard();
+    isNextBlack=!isBlack;
 }
 
 void ChessBoardWidget::paintEvent(QPaintEvent*)
@@ -78,7 +85,7 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
 
 }
 
-void ChessBoardWidget::resizeEvent(QResizeEvent*)
+void ChessBoardWidget::resizeEvent(QResizeEvent* e)
 {
     gridTop=height()*(1-gridAreaSize)*0.5;
     gridBottom=height()*(1+gridAreaSize)*0.5;
@@ -90,6 +97,8 @@ void ChessBoardWidget::resizeEvent(QResizeEvent*)
     cellWidth=gridWidth/(B_WIDTH-1);
 
     update();
+
+    QWidget::resizeEvent(e);
 }
 
 void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
@@ -104,6 +113,28 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
 
         emit clickGrid(cx, cy);
     }
+    QWidget::mousePressEvent(e);
+}
+
+void ChessBoardWidget::mouseMoveEvent(QMouseEvent* e)
+{
+    QPointF p=e->localPos();
+    int mx=qRound((p.x()-gridLeft)/cellWidth);
+    int my=qRound((p.y()-gridTop)/cellHeight);
+    if(mx!=mouseX||my!=mouseY)
+    {
+        mouseX=mx;
+        mouseY=my;
+        update();
+    }
+    QWidget::mouseMoveEvent(e);
+}
+
+void ChessBoardWidget::focusOutEvent(QFocusEvent* e)
+{
+    mouseX=-1;
+    mouseY=-1;
+    QWidget::focusOutEvent(e);
 }
 
 void ChessBoardWidget::drawGrid(QPainter& painter)
@@ -143,21 +174,34 @@ void ChessBoardWidget::drawChess(QPainter& painter)
     {
         for(j=0;j<B_WIDTH;++j)
         {
-            if(!board->isChess(i, j))
-                continue;
-            step=board->getStep(i, j);
             type=board->getGrid(i, j);
-            flag=(i==currentX&&j==currentY);
+            if(type==ChessBoard::invalid)
+                continue;
             painter.save();
             painter.translate(cellWidth*i, cellHeight*j);
-            if(historyStep>0&&historyStep<step)
-                painter.setOpacity(0.2);
-            painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
-                              type==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
-            if(historyStep>=step)
+            if(type==ChessBoard::empty&&historyStep==0&&!board->isFinished())
             {
-                painter.setPen(type==ChessBoard::black?"white":"black");
-                painter.drawText(QRectF(0, 0, cellWidth, cellHeight), Qt::AlignCenter, QString("%0").arg(step));
+                if(i==mouseX&&j==mouseY&&board->checkMove(i, j, isNextBlack))
+                {
+                    painter.setOpacity(0.3);
+                    painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
+                                      isNextBlack?imgChessBlack[0]:imgChessWhite[0]);
+                }
+            }
+            else
+            {
+                step=board->getStep(i, j);
+                flag=(i==currentX&&j==currentY);
+                if(historyStep>0&&historyStep<step)
+                    painter.setOpacity(0.2);
+                painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
+                                  type==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
+                if(historyStep>=step)
+                {
+                    painter.setPen(type==ChessBoard::black?"white":"black");
+                    painter.drawText(QRectF(0, 0, cellWidth, cellHeight), Qt::AlignCenter,
+                                     QString("%0").arg(step));
+                }
             }
             painter.restore();
         }

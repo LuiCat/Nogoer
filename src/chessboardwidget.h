@@ -33,10 +33,12 @@ signals:
 
 protected:
 
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
+    void paintEvent(QPaintEvent* e);
+    void resizeEvent(QResizeEvent* e);
 
     void mousePressEvent(QMouseEvent* e);
+    void mouseMoveEvent(QMouseEvent* e);
+    void focusOutEvent(QFocusEvent* e);
 
 private:
 
@@ -51,7 +53,11 @@ private:
     int currentX;
     int currentY;
 
+    int mouseX;
+    int mouseY;
+
     int historyStep;
+    bool isNextBlack;
 
     QImage imgBoard;
     QImage imgChessBlack[2];
