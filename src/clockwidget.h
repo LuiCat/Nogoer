@@ -28,9 +28,9 @@ public:
     void timeClear();
     void timeStop();
     bool isLoadEngine();
-    void setEngineState(bool isEngine, QString name);
+    void setEngineState(bool isEngine, QString name=QString());
+public slots:
     void setPlayerName(QString tString);
-    // ClockWidget interface
 signals:
     void loadEngine();
     void unloadEngine();

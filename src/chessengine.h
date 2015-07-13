@@ -10,16 +10,18 @@ class ChessEngine : public QObject
 public:
 
     explicit ChessEngine(QObject *parent = 0);
+    ChessEngine(const QString& pathExec, QObject *parent = 0);
+    ~ChessEngine();
 
     bool isAvailable();
 
-    bool loadEngine(QString path);
+    bool loadEngine(const QString& path);
     bool reloadEngine();
     void unloadEngine();
 
     void writeLine(const QByteArray& line);
 
-    QString getName();
+    const QString& getName();
 
     void setMoveOrder(bool isFirst);
 

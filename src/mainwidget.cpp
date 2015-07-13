@@ -2,7 +2,8 @@
 
 #include <QKeyEvent>
 #include <QPainter>
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
+#include <QFileDialog>
 
 int MainWidget::sideMinimumWidth = 160;
 int MainWidget::controlPanelHeight = 100;
@@ -13,6 +14,9 @@ MainWidget::MainWidget(QWidget *parent)
     ,gameCount(0)
     ,moveCount(0)
     ,playerBlack(true)
+    ,chessboard(0)
+    ,engineBlack(0)
+    ,engineWhite(0)
 {
     setMinimumSize(800, 480);
 
@@ -28,10 +32,18 @@ MainWidget::MainWidget(QWidget *parent)
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
     connect(widgetHistory, SIGNAL(showHistory(int, int)), this, SLOT(doShowHistory(int, int)));
 
+    connect(widgetClockBlack, SIGNAL(loadEngine()), this, SLOT(loadEngineBlack()));
+    connect(widgetClockBlack, SIGNAL(unloadEngine()), this, SLOT(unloadEngineBlack()));
+    connect(widgetClockBlack, SIGNAL(showLog()), this, SLOT(showLogBlack()));
+    connect(widgetClockWhite, SIGNAL(loadEngine()), this, SLOT(loadEngineWhite()));
+    connect(widgetClockWhite, SIGNAL(unloadEngine()), this, SLOT(unloadEngineWhite()));
+    connect(widgetClockWhite, SIGNAL(showLog()), this, SLOT(showLogWhite()));
+
     connect(widgetControl, SIGNAL(startGame()), this, SLOT(restartGame()));
     connect(widgetControl, SIGNAL(stopGame()), this, SLOT(stopGame()));
     connect(widgetControl, SIGNAL(loadScript()), this, SLOT(loadScript()));
     connect(widgetControl, SIGNAL(setGuide(bool)), this, SLOT(setGuide(bool)));
+
 
 }
 
@@ -84,20 +96,78 @@ void MainWidget::setGuide(bool enable)
 
 void MainWidget::loadEngineBlack()
 {
-
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", ".", "Chess Engine (*.exe)");
+    if(!path.isNull())
+        loadEngineBlack(path);
 }
 
 void MainWidget::loadEngineWhite()
 {
-
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", ".", "Chess Engine (*.exe)");
+    if(!path.isNull())
+        loadEngineWhite(path);
 }
 
 void MainWidget::loadEngineBlack(QString path)
 {
-
+    if(engineBlack)
+        unloadEngineBlack();
+    engineBlack = new ChessEngine(this);
+    connect(engineBlack, SIGNAL(engineExited(bool)), this, SIGNAL(onEngineExit(bool)));
+    connect(engineBlack, SIGNAL(nameChanged(QString)), widgetClockBlack, SLOT(setPlayerName(QString)));
+    connect(engineBlack, SIGNAL(moveChess(int,int)), this, SLOT(onEngineBlackMove(int,int)));
+    if(!engineBlack->loadEngine(path))
+    {
+        delete engineBlack;
+        engineBlack=0;
+        return;
+    }
+    widgetClockBlack->setEngineState(true, engineBlack->getName());
 }
 
 void MainWidget::loadEngineWhite(QString path)
+{
+    if(engineWhite)
+        unloadEngineWhite();
+    engineWhite = new ChessEngine(this);
+    connect(engineWhite, SIGNAL(engineExited(bool)), this, SIGNAL(onEngineExit(bool)));
+    connect(engineWhite, SIGNAL(nameChanged(QString)), widgetClockWhite, SLOT(setPlayerName(QString)));
+    connect(engineWhite, SIGNAL(moveChess(int,int)), this, SLOT(onEngineWhiteMove(int,int)));
+    if(!engineWhite->loadEngine(path))
+    {
+        delete engineWhite;
+        engineWhite=0;
+        return;
+    }
+    widgetClockWhite->setEngineState(true, engineWhite->getName());
+}
+
+void MainWidget::unloadEngineBlack()
+{
+    if(!engineBlack)
+        return;
+    disconnect(engineBlack, SIGNAL(nameChanged(QString)), 0, 0);
+    engineBlack->unloadEngine();
+    delete engineBlack;
+    widgetClockBlack->setEngineState(false);
+}
+
+void MainWidget::unloadEngineWhite()
+{
+    if(!engineWhite)
+        return;
+    disconnect(engineWhite, SIGNAL(nameChanged(QString)), 0, 0);
+    engineWhite->unloadEngine();
+    delete engineWhite;
+    widgetClockWhite->setEngineState(false);
+}
+
+void MainWidget::showLogBlack()
+{
+
+}
+
+void MainWidget::showLogWhite()
 {
 
 }
@@ -125,9 +195,46 @@ void MainWidget::resizeEvent(QResizeEvent*)
 
 }
 
+void MainWidget::onEngineExit(bool isCrash)
+{
+    if(isCrash)
+    {
+        widgetHistory->pushHistory("Engine Crashed", 1);
+        QMessageBox::critical(this, "", QString("Engine crashed !"));
+    }
+}
+
+void MainWidget::onEngineBlackMove(int x, int y)
+{
+    if(gameStarted&&playerBlack)
+    {
+        if(doMove(x, y))
+            switchSide();
+        else
+        {
+            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
+            stopGame();
+        }
+    }
+}
+
+void MainWidget::onEngineWhiteMove(int x, int y)
+{
+    if(gameStarted&&!playerBlack)
+    {
+        if(doMove(x, y))
+            switchSide();
+        else
+        {
+            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
+            stopGame();
+        }
+    }
+}
+
 void MainWidget::doPlayerMove(int x, int y)
 {
-    if(doMove(x, y))
+    if(gameStarted&&doMove(x, y))
         switchSide();
 }
 

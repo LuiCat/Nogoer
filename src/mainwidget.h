@@ -10,6 +10,9 @@
 #include "controlwidget.h"
 #include "showlogwidget.h"
 
+#include "chessboard.h"
+#include "chessengine.h"
+
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -33,6 +36,11 @@ public slots:
     void loadEngineWhite();
     void loadEngineBlack(QString path);
     void loadEngineWhite(QString path);
+    void unloadEngineBlack();
+    void unloadEngineWhite();
+
+    void showLogBlack();
+    void showLogWhite();
 
     void doPlayerMove(int x, int y);
     void switchSide();
@@ -42,6 +50,12 @@ public slots:
 protected:
 
     void resizeEvent(QResizeEvent*);
+
+protected slots:
+
+    void onEngineExit(bool isCrash);
+    void onEngineBlackMove(int x, int y);
+    void onEngineWhiteMove(int x, int y);
 
 private:
 
@@ -57,6 +71,9 @@ private:
     ChessBoard* chessboard;
 
     QMap<int, ChessBoard*> historyBoard;
+
+    ChessEngine* engineBlack;
+    ChessEngine* engineWhite;
 
     ChessBoardWidget* widgetChessBoard;
 

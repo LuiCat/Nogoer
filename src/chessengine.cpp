@@ -12,12 +12,23 @@ ChessEngine::ChessEngine(QObject *parent)
 
 }
 
+ChessEngine::ChessEngine(const QString& pathExec, QObject* parent)
+    :ChessEngine(parent)
+{
+    loadEngine(pathExec);
+}
+
+ChessEngine::~ChessEngine()
+{
+    unloadEngine();
+}
+
 bool ChessEngine::isAvailable()
 {
     return process!=0;
 }
 
-bool ChessEngine::loadEngine(QString path)
+bool ChessEngine::loadEngine(const QString& path)
 {
     execPath=path;
     return reloadEngine();
@@ -67,7 +78,7 @@ void ChessEngine::writeLine(const QByteArray &line)
     //qDebug()<<line;
 }
 
-QString ChessEngine::getName()
+const QString& ChessEngine::getName()
 {
     if(!isAvailable())
         return "Manual";
