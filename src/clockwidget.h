@@ -16,7 +16,7 @@ private:
     QPushButton* showLogButton;
     QString playerName;
     QString outString;
-    int allPauseTime, pauseTime, nowTime;
+    int allPauseTime, pauseTime, lastTime;
     bool engineLoaded;
     bool isStart, isPause;
 

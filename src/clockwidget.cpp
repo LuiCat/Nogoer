@@ -44,6 +44,7 @@ void ClockWidget::timeStop()
     {
         return;
     }
+    lastTime = getNowTime();
     isPause = true;
     pauseTime = time.elapsed();
     timer.stop();
@@ -105,6 +106,10 @@ int ClockWidget::getNowTime()
     if (!isStart)
     {
         return 0;
+    }
+    if (isPause)
+    {
+        return lastTime;
     }
     return time.elapsed() - allPauseTime;
 }
