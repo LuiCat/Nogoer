@@ -43,9 +43,9 @@ void ControlWidget::gameControl()
 void ControlWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    showCBInfoBox->setGeometry((width() - 100) / 2, (height() - 30) / 2 + 20, 100, 30);
-    gameButton->setGeometry((width() - 100) / 2, (height() - 30) / 2 - 20, 100, 30);
-    scriptButton->setGeometry((width() - 100) / 2, (height() - 30) / 2, 100, 30);/*
+    showCBInfoBox->setGeometry((width() - 100) / 2, (height() - 25) / 2 + 30, 100, 25);
+    gameButton->setGeometry((width() - 100) / 2, (height() - 25) / 2 - 30, 100, 25);
+    scriptButton->setGeometry((width() - 100) / 2, (height() - 25) / 2, 100, 25);/*
     painter.setPen("brown");
     painter.drawRect(10, 10, width() - 20, height() - 20);
     painter.drawRect(15, 15, width() - 30, height() - 30);*/
