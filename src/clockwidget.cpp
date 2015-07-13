@@ -11,7 +11,7 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
     isStart = false;
     isPause = true;
 
-    timer.setInterval(16);
+    timer.setInterval(73);
     connect(&timer, SIGNAL(timeout()), this, SLOT(nextSecond()));
 
     loadEngineButton = new QPushButton("LoadEngine", this);

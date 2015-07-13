@@ -7,7 +7,7 @@ ControlWidget::ControlWidget(QWidget *parent) : QWidget(parent)
     gameStart = false;
     gameButton = new QPushButton("Start", this);
     scriptButton = new QPushButton("Script", this);
-    showCBInfoBox = new QCheckBox("Show Guide", this);
+    showCBInfoBox = new QCheckBox("Step Number", this);
 
     connect(gameButton, SIGNAL(clicked()), this, SLOT(gameControl()));
     connect(scriptButton, SIGNAL(clicked()), this, SIGNAL(loadScript()));
@@ -43,7 +43,7 @@ void ControlWidget::gameControl()
 void ControlWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    showCBInfoBox->setGeometry((width() - 100) / 2, (height() - 25) / 2 + 30, 100, 25);
+    showCBInfoBox->setGeometry((width() - 110) / 2, (height() - 25) / 2 + 30, 110, 25);
     gameButton->setGeometry((width() - 100) / 2, (height() - 25) / 2 - 30, 100, 25);
     scriptButton->setGeometry((width() - 100) / 2, (height() - 25) / 2, 100, 25);/*
     painter.setPen("brown");

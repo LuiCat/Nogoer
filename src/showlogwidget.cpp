@@ -8,7 +8,7 @@ ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog
 
     titleText = new QLabel(logTitle, this);
     titleText->setGeometry(10, 3, 250, 20);
-    mainText = new QPlainTextEdit("editddeidiede\nesavioasnvao", this);
+    mainText = new QPlainTextEdit("", this);
     mainText->setGeometry(10, 25, 230, height() - 35);
     mainText->setReadOnly(true);
 }
