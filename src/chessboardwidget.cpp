@@ -51,6 +51,9 @@ ChessBoard* ChessBoardWidget::getChessBoard() const
 void ChessBoardWidget::setChessBoard(ChessBoard* chessboard)
 {
     board=chessboard;
+    if(!showBoard)
+        showBoard=board;
+    update();
 }
 
 void ChessBoardWidget::showChessBoard(ChessBoard* chessboard)
@@ -62,6 +65,7 @@ void ChessBoardWidget::showChessBoard(ChessBoard* chessboard)
 void ChessBoardWidget::showHistory(int step)
 {
     historyStep=step;
+    update();
 }
 
 void ChessBoardWidget::doChess(int x, int y, bool isBlack)
@@ -122,10 +126,10 @@ void ChessBoardWidget::resizeEvent(QResizeEvent* e)
 
 void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
 {
-    if(board&&!board->isFinished()&&showBoard!=board)
+    if(board&&!board->isFinished()&&(showBoard!=board||historyStep!=0))
     {
-        showChessBoard();
         showHistory();
+        showChessBoard();
     }
     else if(e->button()==Qt::LeftButton)
     {
@@ -221,7 +225,7 @@ void ChessBoardWidget::drawChess(QPainter& painter)
                     painter.setOpacity(0.2);
                 painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
                                   type==ChessBoard::black?imgChessBlack[flag]:imgChessWhite[flag]);
-                if(historyStep>=step)
+                if(showGuide||historyStep>=step)
                 {
                     painter.setPen(type==ChessBoard::black?"white":"black");
                     painter.drawText(QRectF(0, 0, cellWidth, cellHeight), Qt::AlignCenter,
