@@ -10,20 +10,26 @@ class ControlWidget : public QWidget
     Q_OBJECT
 public:
     explicit ControlWidget(QWidget *parent = 0);
-
+    bool isGameStart();
+    void setGameState(bool);
 signals:
     void startGame();
     void stopGame();
     void loadScript();
-    void setHint(bool);
+    void setGuide(bool);
+
 public slots:
+    void gameControl();
+
 private:
     QPushButton *gameButton, *scriptButton;
     QCheckBox *showCBInfoBox;
+    bool gameStart;
 
-    // QWidget interface
 protected:
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
+
 };
 
 #endif // CONTROLWIDGET_H
