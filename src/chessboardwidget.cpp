@@ -51,8 +51,7 @@ ChessBoard* ChessBoardWidget::getChessBoard() const
 void ChessBoardWidget::setChessBoard(ChessBoard* chessboard)
 {
     board=chessboard;
-    if(!showBoard)
-        showBoard=board;
+    showBoard=board;
     update();
 }
 
@@ -208,7 +207,7 @@ void ChessBoardWidget::drawGrid(QPainter& painter)
 
 void ChessBoardWidget::drawChess(QPainter& painter)
 {
-    if(!board)
+    if(!showBoard)
         return;
 
     int i,j,step;
@@ -222,15 +221,15 @@ void ChessBoardWidget::drawChess(QPainter& painter)
     {
         for(j=0;j<B_WIDTH;++j)
         {
-            type=board->getGrid(i, j);
+            type=showBoard->getGrid(i, j);
             if(type==ChessBoard::invalid)
                 continue;
             painter.save();
             painter.translate(cellWidth*i, cellHeight*j);
             if(type==ChessBoard::empty)
             {
-                if(historyStep==0&&!board->isFinished()&&i==mouseX&&j==mouseY
-                        &&showHint&&board->checkMove(i, j, isNextBlack))
+                if(historyStep==0&&!showBoard->isFinished()&&i==mouseX&&j==mouseY
+                        &&showHint&&showBoard->checkMove(i, j, isNextBlack))
                 {
                     painter.setOpacity(0.3);
                     painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),
@@ -239,7 +238,7 @@ void ChessBoardWidget::drawChess(QPainter& painter)
             }
             else
             {
-                step=board->getStep(i, j);
+                step=showBoard->getStep(i, j);
                 flag=(i==currentX&&j==currentY);
                 if(historyStep>0&&historyStep<step)
                     painter.setOpacity(0.2);

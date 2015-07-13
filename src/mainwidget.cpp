@@ -56,6 +56,7 @@ void MainWidget::restartGame()
 {
     chessboard = new ChessBoard(this);
     ++gameCount;
+    moveCount=0;
     playerBlack=true;
     historyBoard.insert(gameCount, chessboard);
     widgetChessBoard->setChessBoard(chessboard);
