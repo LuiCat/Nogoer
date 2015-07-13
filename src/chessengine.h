@@ -21,7 +21,7 @@ public:
 
     void writeLine(const QByteArray& line);
 
-    const QString& getName();
+    QString getName();
 
     void setMoveOrder(bool isFirst);
 

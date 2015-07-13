@@ -254,6 +254,8 @@ void MainWidget::doPlayerMove(int x, int y)
 
 void MainWidget::switchSide()
 {
+    if(!gameStarted)
+        return;
     (playerBlack?widgetClockBlack:widgetClockWhite)->timeStop();
     ++moveCount;
     playerBlack=!playerBlack;

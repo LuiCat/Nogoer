@@ -78,7 +78,7 @@ void ChessEngine::writeLine(const QByteArray &line)
     //qDebug()<<line;
 }
 
-const QString& ChessEngine::getName()
+QString ChessEngine::getName()
 {
     if(!isAvailable())
         return "Manual";
