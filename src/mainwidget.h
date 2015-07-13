@@ -39,6 +39,19 @@ public slots:
 
     void doShowHistory(int gameNum, int stepNum);
 
+//    void slot1()
+//    {
+//        widgetClockBlack->timeStart();
+//    }
+//    void slot2()
+//    {
+//        widgetClockBlack->timeStop();
+//    }
+//    void slot3()
+//    {
+//        widgetClockBlack->timeClear();
+//    }
+
 protected:
 
     void resizeEvent(QResizeEvent*);
@@ -73,6 +86,8 @@ private:
     }
 
     bool doMove(int x, int y);
+
+    //QPushButton *t1, *t2, *t3;
 
 };
 
