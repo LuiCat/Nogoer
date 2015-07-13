@@ -6,8 +6,8 @@
 
 HistoryItem::HistoryItem(QObject* parent)
     :QAbstractItemDelegate(parent)
-    ,infoHeight(20)
-    ,moveHeight(30)
+    ,infoHeight(16)
+    ,moveHeight(20)
 {
     imgBlack.load("data/chessblack.png");
     imgWhite.load("data/chesswhite.png");
@@ -16,11 +16,11 @@ HistoryItem::HistoryItem(QObject* parent)
 void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     painter->save();
-    painter->translate(option.rect.topLeft());
     const HistoryList::ListData* data=index.data().value<const HistoryList::ListData*>();
     if(!data) return;
     if(data->game>0)
     {
+        painter->translate(option.rect.topLeft());
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
         painter->setBrush(QBrush(data->step%2?"#FFFFCC":"#EECCFF"));
@@ -41,14 +41,14 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
         painter->drawText(rect, Qt::AlignCenter, data->text);
         if(data->step%2==0)
         {
-            QRectF rch(1, 1, moveHeight-2, moveHeight-2);
+            QRectF rch(0, 0, moveHeight, moveHeight);
             painter->drawImage(rch, imgBlack);
             painter->setPen("white");
             painter->drawText(rch, Qt::AlignCenter, QString("%0").arg(data->step));
         }
         else
         {
-            QRectF rch(option.rect.width()-moveHeight+2, 1, moveHeight-2, moveHeight-2);
+            QRectF rch(option.rect.width()-moveHeight, 0, moveHeight, moveHeight);
             painter->drawImage(rch, imgWhite);
             painter->setPen("black");
             painter->drawText(rch, Qt::AlignCenter, QString("%0").arg(data->step));
@@ -67,6 +67,11 @@ QSize HistoryItem::sizeHint(const QStyleOptionViewItem& option, const QModelInde
     const HistoryList::ListData* data=index.data().value<const HistoryList::ListData*>();
     if(!data) return QSize();
     return QSize(option.rect.width(), data->game>0?moveHeight:infoHeight);
+}
+
+void HistoryItem::setCurrentIndex(const QModelIndex& index)
+{
+    currentIndex=index;
 }
 
 QPainterPath HistoryItem::makePath(const QSizeF& size, double radiusArc)

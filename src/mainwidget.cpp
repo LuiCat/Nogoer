@@ -45,8 +45,8 @@ void MainWidget::resizeEvent(QResizeEvent*)
 
     widgetChessBoard->setGeometry(widthLeft, yCB, widthCB, heightCB);
 
-    widgetClockBlack->setGeometry(widthLeft+widthCB, 0, widthRight, height()/2);
-    widgetClockWhite->setGeometry(widthLeft+widthCB, height()-height()/2, widthRight, height()/2);
+    widgetClockBlack->setGeometry(widthLeft+widthCB-10, 0, widthRight+10, (height()+10)/2);
+    widgetClockWhite->setGeometry(widthLeft+widthCB-10, (height()-10)/2, widthRight+10, (height()+10)/2);
 
     widgetHistory->setGeometry(0, 0, widthLeft+10, height()-controlPanelHeight);
 

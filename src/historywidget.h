@@ -19,6 +19,10 @@ protected:
 
     void resizeEvent(QResizeEvent*);
 
+protected slots:
+
+    void onMousePress(QModelIndex index);
+
 private:
 
     QListView* view;
