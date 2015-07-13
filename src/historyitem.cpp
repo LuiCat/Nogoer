@@ -7,7 +7,7 @@
 HistoryItem::HistoryItem(QObject* parent)
     :QAbstractItemDelegate(parent)
     ,infoHeight(16)
-    ,moveHeight(20)
+    ,moveHeight(22)
 {
     imgBlack.load("data/chessblack.png");
     imgWhite.load("data/chesswhite.png");
@@ -29,17 +29,19 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
         painter->setBrush(QBrush(isBlack?"#EECCFF":"#FFFFCC"));
+        if(option.state&QStyle::State_HasFocus)
+            painter->setPen("red");
         QRectF rect;
         if(isBlack)
         {
             painter->translate(moveHeight*1.5, moveHeight*0.5);
-            rect=QRectF(moveHeight*1.5, 0, option.rect.width()-moveHeight*2.0, moveHeight);
+            rect=QRectF(moveHeight*1.5, 1, option.rect.width()-moveHeight*2.0, moveHeight-2);
         }
         else
         {
             painter->translate(option.rect.width()-moveHeight*1.5, moveHeight*0.5);
             painter->rotate(180);
-            rect=QRectF(moveHeight*0.5, 0, option.rect.width()-moveHeight*2.0, moveHeight);
+            rect=QRectF(moveHeight*0.5, 1, option.rect.width()-moveHeight*2.0, moveHeight-2);
         }
         painter->drawPath(makePath(rect.size(), 6));
         painter->restore();

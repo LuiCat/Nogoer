@@ -9,13 +9,13 @@ int MainWidget::controlPanelHeight = 100;
 
 MainWidget::MainWidget(QWidget *parent)
     :QWidget(parent)
+    ,gameCount(0)
     ,moveCount(0)
     ,playerBlack(true)
 {
     setMinimumSize(800, 480);
 
-    chessboard = new ChessBoard(this);
-    widgetChessBoard = new ChessBoardWidget(chessboard, this);
+    widgetChessBoard = new ChessBoardWidget(0, this);
 
     widgetClockBlack = new ClockWidget(this);
     widgetClockWhite = new ClockWidget(this);
@@ -25,6 +25,12 @@ MainWidget::MainWidget(QWidget *parent)
     widgetControl = new ControlWidget(this);
 
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
+    connect(widgetHistory, SIGNAL(showHistory(int, int)), this, SLOT(doShowHistory(int, int)));
+
+    chessboard = new ChessBoard(this);
+    ++gameCount;
+    historyBoard.insert(gameCount, chessboard);
+    widgetChessBoard->setChessBoard(chessboard);
 
 }
 
@@ -68,11 +74,21 @@ void MainWidget::switchSide()
     playerBlack=!playerBlack;
 }
 
+void MainWidget::doShowHistory(int gameNum, int stepNum)
+{
+    if(historyBoard.count(gameNum))
+    {
+        widgetChessBoard->showChessBoard(historyBoard[gameNum]);
+        widgetChessBoard->showHistory(stepNum);
+    }
+}
+
 bool MainWidget::doMove(int x, int y)
 {
     if(!chessboard->checkMove(x, y, playerBlack))
         return false;
     widgetChessBoard->doChess(x, y, playerBlack);
+    widgetHistory->pushHistory(QString().sprintf("%c%d", 'A'+y, x), moveCount+1, gameCount);
     if(chessboard->checkFinished(!playerBlack))
     {
         QMessageBox::information(this, "Game Over", QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));

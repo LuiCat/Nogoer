@@ -2,6 +2,7 @@
 #define MAINWIDGET_H
 
 #include <QDialog>
+#include <QMap>
 
 #include "chessboardwidget.h"
 #include "clockwidget.h"
@@ -25,18 +26,23 @@ protected:
 protected slots:
 
     void doPlayerMove(int x, int y);
-
     void switchSide();
+
+    void doShowHistory(int gameNum, int stepNum);
 
 private:
 
     static int sideMinimumWidth;
     static int controlPanelHeight;
 
+    int gameCount;
     int moveCount;
     bool playerBlack;
 
     ChessBoard* chessboard;
+
+    QMap<int, ChessBoard*> historyBoard;
+
     ChessBoardWidget* widgetChessBoard;
 
     ClockWidget* widgetClockBlack;

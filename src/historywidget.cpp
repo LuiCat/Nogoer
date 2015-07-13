@@ -13,7 +13,7 @@ HistoryWidget::HistoryWidget(QWidget* parent)
 
     view->setItemDelegate(item);
     view->setModel(list);
-    view->setSpacing(2);
+    view->setSpacing(1);
     view->setSelectionMode(QAbstractItemView::SingleSelection);
     view->verticalScrollBar()->setStyleSheet(
             "QScrollBar:vertical {margin:0px 0px 0px 0px; background-color:rgb(0, 0, 0, 10);\
@@ -22,13 +22,14 @@ HistoryWidget::HistoryWidget(QWidget* parent)
              QScrollBar::sub-line:vertical {subcontrol-origin:margin; height:0px;}\
              QScrollBar::add-line:vertical {subcontrol-origin:margin; height:0px;}");
 
-    list->append("Infomation");
-    list->append("Warning!!!", 1);
-    for(int i=1;i<222;++i)
-        list->append(QString("Shen %0 Hao").arg(i), i, 1);
-
     connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(onSelectItem(QModelIndex)));
 
+}
+
+void HistoryWidget::pushHistory(const QString& text, int stepNum, int gameNum)
+{
+    list->append(text, stepNum, gameNum);
+    view->scrollToBottom();
 }
 
 void HistoryWidget::resizeEvent(QResizeEvent*)

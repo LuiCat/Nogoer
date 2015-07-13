@@ -85,7 +85,7 @@ int ChessBoard::countLife(int x, int y) const
 
 bool ChessBoard::checkMove(int x, int y, bool isBlack) const
 {
-    if(!isEmpty(x, y))
+    if(!isEmpty(x, y)||gameFinished)
         return false;
     const ChessType oppoChess=(isBlack?white:black);
     bool flagKO=false,flagSC=true;
@@ -121,13 +121,16 @@ bool ChessBoard::isFinished() const
 
 bool ChessBoard::checkFinished(bool checkBlack)
 {
-    int i, j;
+    if(gameFinished)
+        return true;
 
+    int i, j;
     for(i=0;i<B_HEIGHT;++i)
         for(j=0;j<B_WIDTH;++j)
             if(isEmpty(i, j)&&checkMove(i, j, checkBlack))
                 return false;
 
+    gameFinished=true;
     return true;
 }
 

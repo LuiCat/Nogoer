@@ -16,6 +16,8 @@ public:
 
     ChessBoard* getChessBoard() const;
 
+    void setChessBoard(ChessBoard* chessboard);
+
     /// Show a chessboard to screen not making modifies to origin chessboard.
     /// Restore with empty parameter or set to null.
     void showChessBoard(ChessBoard* chessboard=0);
@@ -26,6 +28,8 @@ public:
 public slots:
 
     void doChess(int x, int y, bool isBlack);
+    void setHint(bool enable);
+    void setGuide(bool enable);
 
 signals:
 
@@ -58,6 +62,9 @@ private:
 
     int historyStep;
     bool isNextBlack;
+
+    bool showHint;
+    bool showGuide;
 
     QImage imgBoard;
     QImage imgChessBlack[2];

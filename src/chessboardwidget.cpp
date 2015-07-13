@@ -21,9 +21,10 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
     ,mouseY(-1)
     ,historyStep(0)
     ,isNextBlack(true)
+    ,showHint(true)
+    ,showGuide(false)
 {
-    if(!board)
-        board=new ChessBoard(this);
+
     showBoard=board;
 
     imgBoard.load("data/chessboard.png");
@@ -47,6 +48,11 @@ ChessBoard* ChessBoardWidget::getChessBoard() const
     return board;
 }
 
+void ChessBoardWidget::setChessBoard(ChessBoard* chessboard)
+{
+    board=chessboard;
+}
+
 void ChessBoardWidget::showChessBoard(ChessBoard* chessboard)
 {
     showBoard=(chessboard?chessboard:board);
@@ -67,6 +73,16 @@ void ChessBoardWidget::doChess(int x, int y, bool isBlack)
     isNextBlack=!isBlack;
 }
 
+void ChessBoardWidget::setHint(bool enable)
+{
+    showHint=enable;
+}
+
+void ChessBoardWidget::setGuide(bool enable)
+{
+    showGuide=enable;
+}
+
 void ChessBoardWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
@@ -79,9 +95,12 @@ void ChessBoardWidget::paintEvent(QPaintEvent*)
     drawGrid(painter);
     painter.restore();
 
-    painter.save();
-    drawChess(painter);
-    painter.restore();
+    if(board)
+    {
+        painter.save();
+        drawChess(painter);
+        painter.restore();
+    }
 
 }
 
@@ -103,7 +122,12 @@ void ChessBoardWidget::resizeEvent(QResizeEvent* e)
 
 void ChessBoardWidget::mousePressEvent(QMouseEvent* e)
 {
-    if(e->button()==Qt::LeftButton)
+    if(board&&!board->isFinished()&&showBoard!=board)
+    {
+        showChessBoard();
+        showHistory();
+    }
+    else if(e->button()==Qt::LeftButton)
     {
         int cx,cy;
         QPointF p=e->localPos();
@@ -179,9 +203,10 @@ void ChessBoardWidget::drawChess(QPainter& painter)
                 continue;
             painter.save();
             painter.translate(cellWidth*i, cellHeight*j);
-            if(type==ChessBoard::empty&&historyStep==0&&!board->isFinished())
+            if(type==ChessBoard::empty)
             {
-                if(i==mouseX&&j==mouseY&&board->checkMove(i, j, isNextBlack))
+                if(historyStep==0&&!board->isFinished()&&i==mouseX&&j==mouseY
+                        &&showHint&&board->checkMove(i, j, isNextBlack))
                 {
                     painter.setOpacity(0.3);
                     painter.drawImage(QRectF(0, 0, cellWidth, cellHeight),

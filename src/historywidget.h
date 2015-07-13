@@ -15,6 +15,8 @@ public:
 
     explicit HistoryWidget(QWidget* parent=0);
 
+    void pushHistory(const QString& text, int stepNum=0, int gameNum=0);
+
 protected:
 
     void resizeEvent(QResizeEvent*);

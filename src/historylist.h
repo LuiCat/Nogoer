@@ -31,7 +31,7 @@ public:
 
 public slots:
 
-    void append(QString text, int stepNum=0, int gameNum=0);
+    void append(const QString& text, int stepNum=0, int gameNum=0);
 
 private:
 
