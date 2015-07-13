@@ -130,5 +130,7 @@ void ClockWidget::engineLoading()
         emit unloadEngine();
     }
     else
+    {
         emit loadEngine();
+    }
 }

@@ -22,6 +22,10 @@ bool ControlWidget::isGameStart()
 void ControlWidget::setGameState(bool gameStart)
 {
     this->gameStart = gameStart;
+    if (gameStart)
+        gameButton->setText("Stop");
+    else
+        gameButton->setText("Start");
 }
 
 void ControlWidget::gameControl()
@@ -29,14 +33,10 @@ void ControlWidget::gameControl()
     if (!gameStart)
     {
         emit startGame();
-        gameStart = true;
-        gameButton->setText("Stop");
     }
     else
     {
         emit stopGame();
-        gameStart = false;
-        gameButton->setText("Start");
     }
 }
 
