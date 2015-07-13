@@ -83,6 +83,7 @@ void ClockWidget::setEngineState(bool isEngine, QString name)
 void ClockWidget::setPlayerName(QString tString)
 {
     playerName = tString;
+    update();
 }
 
 QString ClockWidget::strTime()
@@ -120,8 +121,9 @@ void ClockWidget::paintEvent(QPaintEvent *)
     outString = strTime();
     loadEngineButton->setGeometry((width() - 110) / 2, (height() - 20) / 2 + 30, 110, 25);
     showLogButton->setGeometry((width() - 80) / 2, (height() - 20) / 2 + 60, 80, 25);
-    painter.drawText(QPoint((width() - playerName.length() * 7) / 2, (height()) / 2), playerName);
-    painter.drawText(QPoint((width() - outString.length() * 7) / 2, (height()) / 2 - 30), outString);
+    painter.drawText(QRectF(0, height() * 0.5, width(), 12), Qt::AlignCenter, playerName);
+    painter.setFont(QFont("arial", 21));
+    painter.drawText(QRectF(0, height() * 0.5 - 60, width(), 50), Qt::AlignHCenter|Qt::AlignBottom, outString);
     painter.setPen("brown");
     painter.drawRect(10, 10, width() - 20, height() - 20);
     painter.drawRect(15, 15, width() - 30, height() - 30);
