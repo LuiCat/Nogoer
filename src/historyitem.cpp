@@ -61,7 +61,7 @@ void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, c
     else
     {
         painter->fillRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), data->step==0?"#CCFFCC":"#FFCCCC");
-        painter->drawText(option.rect, Qt::AlignCenter, data->text);
+        painter->drawText(option.rect.translated(0, -1), Qt::AlignHCenter, data->text);
     }
     painter->restore();
 }
