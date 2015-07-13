@@ -32,6 +32,9 @@ build-*
 *.qmlproject.user
 *.qmlproject.user.*
 
+# Debug Outputs
+*_out_*
+
 # =========================
 # Operating System Files
 # =========================
