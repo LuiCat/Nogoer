@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-double ChessBoardWidget::gridAreaSize = 0.8;
+double ChessBoardWidget::gridAreaSize = 0.75;
 double ChessBoardWidget::gridBorderSpace = 5.0;
 int ChessBoardWidget::gridDots[5][2] = {{2, 2}, {2, 6}, {4, 4}, {6, 2}, {6, 6}};
 
@@ -185,6 +185,24 @@ void ChessBoardWidget::drawGrid(QPainter& painter)
 
     for(int i=0;i<5;++i)
         painter.drawPoint(QPointF(gridDots[i][0]*cellWidth, gridDots[i][1]*cellHeight));
+
+    painter.setFont(QFont("arial", 14));
+
+    for(int i=0;i<B_WIDTH;++i)
+        painter.drawText(QRectF(i*cellWidth-10, -cellHeight*0.5-15, 20, 20),
+                         Qt::AlignCenter, QString("%0").arg(i));
+
+    for(int i=0;i<B_HEIGHT;++i)
+        painter.drawText(QRectF(-cellWidth*0.5-15, i*cellHeight-10, 20, 20),
+                         Qt::AlignCenter, QString().sprintf("%c",'A'+i));
+
+    for(int i=0;i<B_WIDTH;++i)
+        painter.drawText(QRectF(i*cellWidth-10, gridHeight+cellHeight*0.5-5, 20, 20),
+                         Qt::AlignCenter, QString("%0").arg(i));
+
+    for(int i=0;i<B_HEIGHT;++i)
+        painter.drawText(QRectF(gridWidth+cellWidth*0.5-5, i*cellHeight-10, 20, 20),
+                         Qt::AlignCenter, QString().sprintf("%c",'A'+i));
 
 }
 
