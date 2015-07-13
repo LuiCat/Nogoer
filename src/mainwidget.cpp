@@ -22,6 +22,8 @@ MainWidget::MainWidget(QWidget *parent)
 
     widgetHistory = new HistoryWidget(this);
 
+    widgetControl = new ControlWidget(this);
+
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
 
 }
@@ -49,6 +51,8 @@ void MainWidget::resizeEvent(QResizeEvent*)
     widgetClockWhite->setGeometry(widthLeft+widthCB-10, (height()-10)/2, widthRight+10, (height()+10)/2);
 
     widgetHistory->setGeometry(0, 0, widthLeft+10, height()-controlPanelHeight);
+
+    widgetControl->setGeometry(0, height()-controlPanelHeight-10, widthLeft+10, controlPanelHeight+10);
 
 }
 

@@ -43,6 +43,8 @@ private:
 
     HistoryWidget* widgetHistory;
 
+    ControlWidget* widgetControl;
+
     inline ClockWidget* getClockWidget(bool isBlack)
     {
         return isBlack?widgetClockBlack:widgetClockWhite;
