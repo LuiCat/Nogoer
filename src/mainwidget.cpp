@@ -89,8 +89,8 @@ void MainWidget::stopGame()
 {
     if(!gameStarted)
         return;
-    if(engineBlack)engineBlack->unloadEngine();
-    if(engineWhite)engineWhite->unloadEngine();
+    if(engineBlack)engineBlack->writeLine("stop");
+    if(engineWhite)engineWhite->writeLine("stop");
     playerEnd(!playerBlack);
     playerEnd(playerBlack);
     gameStarted=false;

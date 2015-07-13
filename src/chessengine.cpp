@@ -116,7 +116,7 @@ void ChessEngine::writeMove(int x, int y)
 void ChessEngine::dealLine()
 {
     if(!isAvailable())return;
-    while(process->canReadLine())
+    while(process&&process->canReadLine())
     {
         QByteArray line=process->readLine();
         if(line.endsWith('\n'))
