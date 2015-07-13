@@ -10,3 +10,6 @@ int main(int argc, char* argv[])
 
     return a.exec();
 }
+
+
+//start stop clear 均可 多次调用。 start 之后的start 无效  stop 同理  clear 同理

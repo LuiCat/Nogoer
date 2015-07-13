@@ -17,8 +17,8 @@ private:
     QString playerName;
     QString outString;
     int allPauseTime, pauseTime, nowTime;
-    bool isStop, isClear, thisStart;
     bool engineLoaded;
+    bool isStart, isPause;
 
     QString strTime();
     int getNowTime();

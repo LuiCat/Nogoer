@@ -6,8 +6,10 @@
 ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
 {
     setPlayerName("Player");
+    engineLoaded = false;
     allPauseTime = pauseTime = 0;
-    thisStart = isStop = isClear = false;
+    isStart = false;
+    isPause = true;
 
     timer.setInterval(16);
     connect(&timer, SIGNAL(timeout()), this, SLOT(nextSecond()));
@@ -21,35 +23,38 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent)
 
 void ClockWidget::timeStart()
 {
-    if(!isStop)
-        return;
-    isStop = isClear = false;
-    if (!thisStart)
+    if (!isStart)
     {
         time.start();
-        thisStart = true;
+        isStart = true;
     }
-    timer.start();
+    if (!isPause)
+    {
+        return;
+    }
+    isPause = false;
     allPauseTime += time.elapsed() - pauseTime;
+    timer.start();
+    update();
 }
 
 void ClockWidget::timeStop()
 {
-    if(isStop)
+    if (!isStart || isPause)
+    {
         return;
+    }
+    isPause = true;
     pauseTime = time.elapsed();
     timer.stop();
-    nowTime = getNowTime();
-    isStop = true;
     update();
 }
 
 void ClockWidget::timeClear()
 {
-    allPauseTime = 0;
-    pauseTime = 0;
-    thisStart = false;
-    isClear = true;
+    isStart = false;
+    isPause = true;
+    allPauseTime = pauseTime = 0;
     update();
 }
 
@@ -97,10 +102,10 @@ QString ClockWidget::strTime()
 
 int ClockWidget::getNowTime()
 {
-    if (isClear)
+    if (!isStart)
+    {
         return 0;
-    if (isStop)
-        return nowTime;
+    }
     return time.elapsed() - allPauseTime;
 }
 

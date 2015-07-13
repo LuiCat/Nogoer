@@ -44,6 +44,19 @@ MainWidget::MainWidget(QWidget *parent)
     connect(widgetControl, SIGNAL(loadScript()), this, SLOT(loadScript()));
     connect(widgetControl, SIGNAL(setGuide(bool)), this, SLOT(setGuide(bool)));
 
+    /*
+    t1 = new QPushButton("test1",this);
+    t2 = new QPushButton("test2",this);
+    t3 = new QPushButton("test3",this);
+
+    t1->setGeometry(0, 20, 50, 20);
+    t2->setGeometry(0, 40, 50, 20);
+    t3->setGeometry(0, 60, 50, 20);
+
+    connect(t1, SIGNAL(released()), this, SLOT(slot1()));
+    connect(t2, SIGNAL(released()), this, SLOT(slot2()));
+    connect(t3, SIGNAL(released()), this, SLOT(slot3()));
+    */
 
 }
 
