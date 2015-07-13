@@ -108,7 +108,9 @@ void ClockWidget::paintEvent(QPaintEvent *)
     showLogButton->setGeometry((width() - 80) / 2, (height() - 30) / 2 + 45, 80, 30);
     painter.drawText(QPoint((width() - playerName.length() * 7) / 2, (height()) / 2), playerName);
     painter.drawText(QPoint((width() - outString.length() * 7) / 2, (height() - 50) / 2), outString);
+    painter.setPen("brown");
     painter.drawRect(10, 10, width() - 20, height() - 20);
+    painter.drawRect(15, 15, width() - 30, height() - 30);
 }
 
 void ClockWidget::resizeEvent(QResizeEvent *)
