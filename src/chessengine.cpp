@@ -50,7 +50,7 @@ bool ChessEngine::reloadEngine()
     }
     engineName="Engine";
     nameRead=false;
-    writeLine("name?");
+    writeLine("name");
     emit nameChanged(engineName);
     return true;
 }
@@ -123,16 +123,16 @@ void ChessEngine::dealLine()
             line.chop(1);
         if(line.endsWith('\r'))
             line.chop(1);
-        qDebug()<<line;
+        qDebug()<<QString::fromLocal8Bit(line);
         if(!nameRead)
         {
             engineType=0;
             if(line.length()>0)
             {
                 if(line.startsWith("name "))
-                    engineName=line.mid(5);
+                    engineName=QString::fromLocal8Bit(line.mid(5));
                 else
-                    engineName=line;
+                    engineName=QString::fromLocal8Bit(line);
                 //qDebug()<<engineName;
                 engineType=0;
             }

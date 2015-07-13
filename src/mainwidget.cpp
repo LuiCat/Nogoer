@@ -110,14 +110,14 @@ void MainWidget::setGuide(bool enable)
 
 void MainWidget::loadEngineBlack()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", ".", "Chess Engine (*.exe)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe)");
     if(!path.isNull())
         loadEngineBlack(path);
 }
 
 void MainWidget::loadEngineWhite()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", ".", "Chess Engine (*.exe)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe)");
     if(!path.isNull())
         loadEngineWhite(path);
 }
@@ -127,7 +127,7 @@ void MainWidget::loadEngineBlack(QString path)
     if(engineBlack)
         unloadEngineBlack();
     engineBlack = new ChessEngine(this);
-    connect(engineBlack, SIGNAL(engineExited(bool)), this, SIGNAL(onEngineExit(bool)));
+    connect(engineBlack, SIGNAL(engineExited(bool)), this, SLOT(onEngineExit(bool)));
     connect(engineBlack, SIGNAL(nameChanged(QString)), widgetClockBlack, SLOT(setPlayerName(QString)));
     connect(engineBlack, SIGNAL(moveChess(int,int)), this, SLOT(onEngineBlackMove(int,int)));
     if(!engineBlack->loadEngine(path))
@@ -144,7 +144,7 @@ void MainWidget::loadEngineWhite(QString path)
     if(engineWhite)
         unloadEngineWhite();
     engineWhite = new ChessEngine(this);
-    connect(engineWhite, SIGNAL(engineExited(bool)), this, SIGNAL(onEngineExit(bool)));
+    connect(engineWhite, SIGNAL(engineExited(bool)), this, SLOT(onEngineExit(bool)));
     connect(engineWhite, SIGNAL(nameChanged(QString)), widgetClockWhite, SLOT(setPlayerName(QString)));
     connect(engineWhite, SIGNAL(moveChess(int,int)), this, SLOT(onEngineWhiteMove(int,int)));
     if(!engineWhite->loadEngine(path))
@@ -160,9 +160,10 @@ void MainWidget::unloadEngineBlack()
 {
     if(!engineBlack)
         return;
-    disconnect(engineBlack, SIGNAL(nameChanged(QString)), 0, 0);
+    disconnect(engineBlack, 0, 0, 0);
     engineBlack->unloadEngine();
     delete engineBlack;
+    engineBlack=0;
     widgetClockBlack->setEngineState(false);
 }
 
@@ -170,9 +171,10 @@ void MainWidget::unloadEngineWhite()
 {
     if(!engineWhite)
         return;
-    disconnect(engineWhite, SIGNAL(nameChanged(QString)), 0, 0);
+    disconnect(engineWhite, 0, 0, 0);
     engineWhite->unloadEngine();
     delete engineWhite;
+    engineWhite=0;
     widgetClockWhite->setEngineState(false);
 }
 
