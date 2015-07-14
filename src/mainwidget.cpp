@@ -142,7 +142,7 @@ void MainWidget::loadScript(QString path)
     script = new ChessScript(path.toLocal8Bit(), this);
     widgetHistory->pushHistory("Script Loaded");
     connect(script, SIGNAL(finished()), this, SLOT(onScriptFinish()));
-    connect(script, SIGNAL(startChess()), this, SLOT(onScriptStartChess()));
+    connect(script, SIGNAL(startChess(QString, QString)), this, SLOT(onScriptStartChess(QString, QString)));
     connect(script, SIGNAL(loadEngine(bool, QString)), this, SLOT(onScriptLoadEngine(bool, QString)));
     connect(script, SIGNAL(error(QString)), this, SLOT(onScriptError(QString)));
     script->start();
@@ -385,11 +385,22 @@ bool MainWidget::doMove(int x, int y)
     if(!chessboard->checkMove(x, y, playerBlack))
         return false;
     widgetChessBoard->doChess(x, y, playerBlack);
-    widgetHistory->pushHistory(QString().sprintf("%c%d", 'A'+y, x), moveCount+1, gameCount);
+    if(!script)
+        widgetHistory->pushHistory(QString().sprintf("%c%d", 'A'+y, x), moveCount+1, gameCount);
     if(chessboard->checkFinished(!playerBlack))
     {
         stopGame();
-        QMessageBox::information(this, "Game Over", QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));
+        widgetHistory->pushHistory(QString("%0 Win").arg(playerBlack?"BLACK":"WHITE"));
+        if(script)
+        {
+            script->increaseWinCount(playerBlack, chessboard->getMoveNum(playerBlack)+1);
+            script->resume();
+        }
+        else
+        {
+            QMessageBox::information(this, "Game Over",
+                                     QString("Winner is %0 !").arg(playerBlack?"BLACK":"WHITE"));
+        }
     }
     else
     {

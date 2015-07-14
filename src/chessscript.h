@@ -45,7 +45,7 @@ public:
 
     ChessScript(const QByteArray& filename, QObject* parent=0);
 
-    void increaseWinCount(bool isWhite);
+    void increaseWinCount(bool isWhite, int num=1);
 
 public slots:
 

@@ -66,7 +66,7 @@ ChessScript::ChessScript(const QByteArray& filename, QObject* parent)
     mtx.lock();
 }
 
-void ChessScript::increaseWinCount(bool isWhite)
+void ChessScript::increaseWinCount(bool isWhite, int num)
 {
     ++(isWhite?whiteWins:blackWins);
 }
