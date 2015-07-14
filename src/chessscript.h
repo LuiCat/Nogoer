@@ -10,6 +10,7 @@
 class ChessScript : public QThread
 {
     Q_OBJECT
+
 private:
 
     LuaScript script;
@@ -29,19 +30,20 @@ protected:
     static int lua_loadEngine(lua_State* L);
     static int lua_startChess(lua_State* L);
 
-    void doLoadEngine(bool isWhite, QString filename);
-    void doStartChess();
+    void doLoadEngine(bool isFirst, QString filename);
+    void doStartChess(QString paramFirst, QString paramSecond);
 
     void run();
 
 signals:
 
-    void loadEngine(bool isWhite, QString filename);
-    void startChess();
+    void loadEngine(bool isFirst, QString filename);
+    void startChess(QString paramFirst, QString paramSecond);
+    void error(QString errorString);
 
 public:
 
-    ChessScript(const QByteArray& filename);
+    ChessScript(const QByteArray& filename, QObject* parent=0);
 
     void increaseWinCount(bool isWhite);
 

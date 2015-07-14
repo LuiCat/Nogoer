@@ -12,6 +12,7 @@
 
 #include "chessboard.h"
 #include "chessengine.h"
+#include "chessscript.h"
 
 class MainWidget : public QWidget
 {
@@ -25,10 +26,12 @@ public:
 public slots:
 
     void restartGame();
+    void restartGame(const QString& paramBlack, const QString& paramWhite);
     void stopGame();
 
     void loadScript();
     void loadScript(QString path);
+    void unloadScript();
 
     void setGuide(bool enable);
 
@@ -46,6 +49,8 @@ public slots:
     void switchSide();
 
     void doShowHistory(int gameNum, int stepNum);
+
+    void doLoadScript();
 
 //    void slot1()
 //    {
@@ -70,6 +75,12 @@ protected slots:
     void onEngineBlackMove(int x, int y);
     void onEngineWhiteMove(int x, int y);
 
+    void onScriptLoadEngine(bool isFirst, QString filename);
+    void onScriptStartChess(QString paramFirst, QString paramSecond);
+    void onScriptFinish();
+    void onScriptError(QString errorLine);
+
+
 private:
 
     static int sideMinimumWidth;
@@ -87,6 +98,8 @@ private:
 
     ChessEngine* engineBlack;
     ChessEngine* engineWhite;
+
+    ChessScript* script;
 
     ChessBoardWidget* widgetChessBoard;
 

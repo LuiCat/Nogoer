@@ -17,6 +17,7 @@ MainWidget::MainWidget(QWidget *parent)
     ,chessboard(0)
     ,engineBlack(0)
     ,engineWhite(0)
+    ,script(0)
 {
     setMinimumSize(800, 480);
 
@@ -41,7 +42,7 @@ MainWidget::MainWidget(QWidget *parent)
 
     connect(widgetControl, SIGNAL(startGame()), this, SLOT(restartGame()));
     connect(widgetControl, SIGNAL(stopGame()), this, SLOT(stopGame()));
-    connect(widgetControl, SIGNAL(loadScript()), this, SLOT(loadScript()));
+    connect(widgetControl, SIGNAL(loadScript()), this, SLOT(doLoadScript()));
     connect(widgetControl, SIGNAL(setGuide(bool)), this, SLOT(setGuide(bool)));
 
     /*
@@ -85,6 +86,34 @@ void MainWidget::restartGame()
     if(engineWhite)engineWhite->writeLine("newwhite");
 }
 
+void MainWidget::restartGame(const QString& paramBlack, const QString& paramWhite)
+{
+    chessboard = new ChessBoard(this);
+    ++gameCount;
+    moveCount=0;
+    playerBlack=true;
+    if(engineBlack)engineBlack->reloadEngine();
+    if(engineWhite)engineWhite->reloadEngine();
+    historyBoard.insert(gameCount, chessboard);
+    widgetChessBoard->setChessBoard(chessboard);
+    widgetHistory->pushHistory("Game Started");
+    widgetControl->setGameState(true);
+    gameStarted=true;
+    widgetClockBlack->timeClear();
+    widgetClockWhite->timeClear();
+    playerBegin(playerBlack);
+    if(engineBlack)
+    {
+        engineBlack->writeLine(paramBlack.toLocal8Bit());
+        engineBlack->writeLine("newblack");
+    }
+    if(engineWhite)
+    {
+        engineWhite->writeLine(paramWhite.toLocal8Bit());
+        engineWhite->writeLine("newwhite");
+    }
+}
+
 void MainWidget::stopGame()
 {
     if(!gameStarted)
@@ -101,12 +130,35 @@ void MainWidget::stopGame()
 
 void MainWidget::loadScript()
 {
-
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Script File...", "",
+                                                     "Lua Script (*.lua);;All Files (*)");
+    if(!path.isNull())
+        loadScript(path);
 }
 
 void MainWidget::loadScript(QString path)
 {
+    unloadScript();
+    script = new ChessScript(path.toLocal8Bit(), this);
+    widgetHistory->pushHistory("Script Loaded");
+    connect(script, SIGNAL(finished()), this, SLOT(onScriptFinish()));
+    connect(script, SIGNAL(startChess()), this, SLOT(onScriptStartChess()));
+    connect(script, SIGNAL(loadEngine(bool, QString)), this, SLOT(onScriptLoadEngine(bool, QString)));
+    connect(script, SIGNAL(error(QString)), this, SLOT(onScriptError(QString)));
+    script->start();
+}
 
+void MainWidget::unloadScript()
+{
+    if(script)
+    {
+        widgetHistory->pushHistory("Script Terminated");
+        disconnect(script, 0, 0, 0);
+        script->terminate();
+        script->wait();
+        delete script;
+        script=0;
+    }
 }
 
 void MainWidget::setGuide(bool enable)
@@ -116,14 +168,16 @@ void MainWidget::setGuide(bool enable)
 
 void MainWidget::loadEngineBlack()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe);;All Files (*)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "",
+                                                     "Chess Engine (*.exe);;All Files (*)");
     if(!path.isNull())
         loadEngineBlack(path);
 }
 
 void MainWidget::loadEngineWhite()
 {
-    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "", "Chess Engine (*.exe);;All Files (*)");
+    const QString& path=QFileDialog::getOpenFileName(this, "Open Executable...", "",
+                                                     "Chess Engine (*.exe);;All Files (*)");
     if(!path.isNull())
         loadEngineWhite(path);
 }
@@ -224,6 +278,7 @@ void MainWidget::onEngineExit(bool isCrash)
         widgetHistory->pushHistory("Engine Crashed", 1);
         QMessageBox::critical(this, "", QString("Engine crashed !"));
     }
+    stopGame();
 }
 
 void MainWidget::onEngineBlackMove(int x, int y)
@@ -262,6 +317,30 @@ void MainWidget::onEngineWhiteMove(int x, int y)
     }
 }
 
+void MainWidget::onScriptLoadEngine(bool isFirst, QString filename)
+{
+    if(isFirst)loadEngineBlack(filename);
+    else loadEngineWhite(filename);
+    if(script)
+        script->resume();
+}
+
+void MainWidget::onScriptStartChess(QString paramFirst, QString paramSecond)
+{
+    restartGame(paramFirst, paramSecond);
+}
+
+void MainWidget::onScriptFinish()
+{
+    widgetHistory->pushHistory("Script Finish");
+    unloadScript();
+}
+
+void MainWidget::onScriptError(QString errorLine)
+{
+    widgetHistory->pushHistory(errorLine, 1);
+}
+
 void MainWidget::doPlayerMove(int x, int y)
 {
     if(!gameStarted)
@@ -286,6 +365,18 @@ void MainWidget::doShowHistory(int gameNum, int stepNum)
     {
         widgetChessBoard->showChessBoard(historyBoard[gameNum]);
         widgetChessBoard->showHistory(stepNum);
+    }
+}
+
+void MainWidget::doLoadScript()
+{
+    if(script)
+    {
+        unloadScript();
+    }
+    else
+    {
+        loadScript();
     }
 }
 

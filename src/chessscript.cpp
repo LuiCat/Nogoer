@@ -20,22 +20,27 @@ int ChessScript::lua_startChess(lua_State* L)
         n=lua_tointeger(L, 1);
     inst->whiteWins=0;
     inst->blackWins=0;
+    QString lineFirst, lineSecond;
+    if(lua_isstring(L, 2))
+        lineFirst=QString::fromLocal8Bit(lua_tostring(L, 1));
+    if(lua_isstring(L, 3))
+        lineSecond=QString::fromLocal8Bit(lua_tostring(L, 1));
     while(n--)
-        inst->doStartChess();
+        inst->doStartChess(lineFirst, lineSecond);
     lua_pushnumber(L, inst->whiteWins);
     lua_pushnumber(L, inst->blackWins);
     return 2;
 }
 
-void ChessScript::doLoadEngine(bool isWhite, QString filename)
+void ChessScript::doLoadEngine(bool isFirst, QString filename)
 {
-    emit loadEngine(isWhite, filename);
+    emit loadEngine(isFirst, filename);
     yield.wait(&mtx);
 }
 
-void ChessScript::doStartChess()
+void ChessScript::doStartChess(QString paramFirst, QString paramSecond)
 {
-    emit startChess();
+    emit startChess(paramFirst, paramSecond);
     yield.wait(&mtx);
 }
 
@@ -47,12 +52,13 @@ void ChessScript::run()
     }
     catch(const LuaError& e)
     {
-        qWarning()<<e.what()<<"(code: "<<e.code()<<")";
+        emit error(QString("%0 (code: %1)").arg(e.what()).arg(e.code()));
     }
 }
 
-ChessScript::ChessScript(const QByteArray& filename)
-    :path(filename)
+ChessScript::ChessScript(const QByteArray& filename, QObject* parent)
+    :QThread(parent)
+    ,path(filename)
 {
     inst=this;
     script.registerFunc("loadEngine", lua_loadEngine);
