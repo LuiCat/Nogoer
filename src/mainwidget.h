@@ -106,6 +106,9 @@ private:
     ClockWidget* widgetClockBlack;
     ClockWidget* widgetClockWhite;
 
+    ShowLogWidget* widgetLogBlack;
+    ShowLogWidget* widgetLogWhite;
+
     HistoryWidget* widgetHistory;
 
     ControlWidget* widgetControl;

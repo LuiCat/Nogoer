@@ -13,6 +13,7 @@ public:
     explicit ShowLogWidget(const QString&, QWidget *parent = 0);
     void pushLine(const QString&);
     void pushText(const QString&);
+    bool isOpen();
 signals:
 
 public slots:
@@ -20,10 +21,15 @@ public slots:
 private:
     QLabel *titleText;
     QPlainTextEdit *mainText;
+    bool widgetOpen;
 
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *);
+    void showEvent(QShowEvent *);
+    void closeEvent(QCloseEvent *);
+    // QWidget interface
+
 };
 
 #endif // SHOWLOGWIDGET_H

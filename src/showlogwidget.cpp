@@ -6,6 +6,7 @@ ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog
     setMinimumSize(250, 300);
     setMaximumWidth(250);
 
+    widgetOpen = false;
     titleText = new QLabel(logTitle, this);
     titleText->setGeometry(10, 3, 250, 20);
     mainText = new QPlainTextEdit("", this);
@@ -25,7 +26,22 @@ void ShowLogWidget::pushText(const QString & newLogInfo)
     mainText->setPlainText(history);
 }
 
+bool ShowLogWidget::isOpen()
+{
+    return widgetOpen;
+}
+
 void ShowLogWidget::paintEvent(QPaintEvent *)
 {
     mainText->setGeometry(10, 25, 230, height() - 35);
+}
+
+void ShowLogWidget::showEvent(QShowEvent *)
+{
+    widgetOpen = true;
+}
+
+void ShowLogWidget::closeEvent(QCloseEvent *)
+{
+    widgetOpen = false;
 }
