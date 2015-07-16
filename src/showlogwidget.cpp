@@ -1,5 +1,7 @@
 #include "showlogwidget.h"
 
+#include <QPushButton>
+
 ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog(parent)
 {
     resize(250, 300);
@@ -12,23 +14,32 @@ ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog
     mainText = new QPlainTextEdit("", this);
     mainText->setGeometry(10, 25, 230, height() - 35);
     mainText->setReadOnly(true);
+    clearButton = new QPushButton("Clear", this);
+    clearButton->setGeometry(180, 3, 60, 20);
+
+    connect(clearButton, SIGNAL(clicked()), this, SLOT(clearText()));
 }
 
 void ShowLogWidget::pushLine(const QString& newLogInfo)
 {
     QString history = mainText->toPlainText() + newLogInfo + "\n";
-    mainText->setPlainText(history);
+    mainText->setPlainText(history.right(20000));
 }
 
 void ShowLogWidget::pushText(const QString & newLogInfo)
 {
     QString history = mainText->toPlainText() + newLogInfo;
-    mainText->setPlainText(history);
+    mainText->setPlainText(history.right(20000));
 }
 
 bool ShowLogWidget::isOpen()
 {
     return widgetOpen;
+}
+
+void ShowLogWidget::clearText()
+{
+    mainText->clear();
 }
 
 void ShowLogWidget::paintEvent(QPaintEvent *)

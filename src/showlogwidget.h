@@ -17,10 +17,11 @@ public:
 signals:
 
 public slots:
-
+    void clearText();
 private:
     QLabel *titleText;
     QPlainTextEdit *mainText;
+    QPushButton *clearButton;
     bool widgetOpen;
 
     // QWidget interface

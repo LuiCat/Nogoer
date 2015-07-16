@@ -179,6 +179,7 @@ void MainWidget::loadEngineBlack(QString path)
     connect(engineBlack, SIGNAL(engineExited(bool)), this, SLOT(onEngineExit(bool)));
     connect(engineBlack, SIGNAL(nameChanged(QString)), widgetClockBlack, SLOT(setPlayerName(QString)));
     connect(engineBlack, SIGNAL(moveChess(int,int)), this, SLOT(onEngineBlackMove(int,int)));
+    connect(engineBlack, SIGNAL(engineLine(QByteArray)), this, SLOT(onEngineBlackLog(QByteArray)));
     if(!engineBlack->loadEngine(path))
     {
         delete engineBlack;
@@ -196,6 +197,7 @@ void MainWidget::loadEngineWhite(QString path)
     connect(engineWhite, SIGNAL(engineExited(bool)), this, SLOT(onEngineExit(bool)));
     connect(engineWhite, SIGNAL(nameChanged(QString)), widgetClockWhite, SLOT(setPlayerName(QString)));
     connect(engineWhite, SIGNAL(moveChess(int,int)), this, SLOT(onEngineWhiteMove(int,int)));
+    connect(engineWhite, SIGNAL(engineLine(QByteArray)), this, SLOT(onEngineWhiteLog(QByteArray)));
     if(!engineWhite->loadEngine(path))
     {
         delete engineWhite;
@@ -312,6 +314,16 @@ void MainWidget::onEngineWhiteMove(int x, int y)
     }
 }
 
+void MainWidget::onEngineBlackLog(QByteArray line)
+{
+    widgetLogBlack->pushLine(QString::fromLocal8Bit(line));
+}
+
+void MainWidget::onEngineWhiteLog(QByteArray line)
+{
+    widgetLogWhite->pushLine(QString::fromLocal8Bit(line));
+}
+
 void MainWidget::onScriptLoadEngine(bool isFirst, QString filename)
 {
     if(isFirst)loadEngineBlack(filename);
@@ -388,7 +400,7 @@ bool MainWidget::doMove(int x, int y)
         widgetHistory->pushHistory(QString("%0 Win").arg(playerBlack?"BLACK":"WHITE"));
         if(script)
         {
-            script->increaseWinCount(playerBlack, chessboard->getMoveNum(playerBlack)+1);
+            script->increaseWinCount(playerBlack, chessboard->getMoveNum(playerBlack)*2+1);
             script->resume();
         }
         else

@@ -74,12 +74,13 @@ protected slots:
     void onEngineExit(bool isCrash);
     void onEngineBlackMove(int x, int y);
     void onEngineWhiteMove(int x, int y);
+    void onEngineBlackLog(QByteArray line);
+    void onEngineWhiteLog(QByteArray line);
 
     void onScriptLoadEngine(bool isFirst, QString filename);
     void onScriptStartChess(QString paramFirst, QString paramSecond);
     void onScriptFinish();
     void onScriptError(QString errorLine);
-
 
 private:
 

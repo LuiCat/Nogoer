@@ -75,6 +75,7 @@ void ChessEngine::writeLine(const QByteArray &line)
     if(!isAvailable())return;
     process->write(line);
     process->write("\n");
+    emit engineLine(line);
     //qDebug()<<line;
 }
 
@@ -124,6 +125,7 @@ void ChessEngine::dealLine()
         if(line.endsWith('\r'))
             line.chop(1);
         qDebug()<<QString::fromLocal8Bit(line);
+        emit engineLine(line);
         if(!nameRead)
         {
             engineType=0;

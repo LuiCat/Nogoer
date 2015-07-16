@@ -35,6 +35,7 @@ signals:
     void moveChess(int x, int y);
     void nameChanged(QString name=QString());
     void engineExited(bool isCrashed);
+    void engineLine(QByteArray line);
 
 protected slots:
 

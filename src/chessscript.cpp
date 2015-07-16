@@ -68,7 +68,7 @@ ChessScript::ChessScript(const QByteArray& filename, QObject* parent)
 
 void ChessScript::increaseWinCount(bool isWhite, int num)
 {
-    ++(isWhite?whiteWins:blackWins);
+    (isWhite?whiteWins:blackWins)+=num;
 }
 
 void ChessScript::resume()
