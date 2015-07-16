@@ -1,6 +1,7 @@
 #include "showlogwidget.h"
 
 #include <QPushButton>
+#include <QScrollBar>
 
 ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog(parent)
 {
@@ -24,12 +25,14 @@ void ShowLogWidget::pushLine(const QString& newLogInfo)
 {
     QString history = mainText->toPlainText() + newLogInfo + "\n";
     mainText->setPlainText(history.right(20000));
+    mainText->verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
 }
 
 void ShowLogWidget::pushText(const QString & newLogInfo)
 {
     QString history = mainText->toPlainText() + newLogInfo;
     mainText->setPlainText(history.right(20000));
+    mainText->verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
 }
 
 bool ShowLogWidget::isOpen()
