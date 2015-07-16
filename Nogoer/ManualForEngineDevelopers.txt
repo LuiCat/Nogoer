@@ -1,0 +1,32 @@
+Manual for engine developers
+
+Nogoer use stdin and stdout to communicate with engines. Simply use printf/cout for output in C/C++, as is similar using other languages.
+Nogoer deals engine outputs line by line. Commands lines below. Any other output that doesn't confict will be pushed into info window.
+
+Example:
+[input/output/both]command line
+(at which situation)
+Explains.
+
+[input]name
+(when engine first started)
+Nogoer requests engine for engine name. The first line after the command is regarded as engine name.
+
+[output]name My Engine Name
+(after requesting engine name)
+Gives the engine name. The first word "name" can be left out, as Nogoer ignore the first word "name".
+
+[input]newblack
+[input]newwhite
+(when user clicks start button with engine loaded)
+Start the game with play order specified. Black perform moves first.
+
+[both]move:00
+(when performing a move)
+By this command line Nogoer gives opponent's moves to engine and engine gives it's moves to Nogoer.
+Number 0 can be replaced to any single-digit number between 0~8.
+The first number is for row number, shown as upcase letters in Nogoer. The second is for column number.
+
+[input]stop
+(when user stopping the game)
+Deal with it if your engine has resources to be released.
