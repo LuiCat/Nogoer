@@ -44,3 +44,6 @@ SOURCES += \
     showlogwidget.cpp
 
 LIBS += $$PWD/lua/lua.a
+
+RESOURCES += \
+    resource.qrc

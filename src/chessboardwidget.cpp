@@ -27,11 +27,11 @@ ChessBoardWidget::ChessBoardWidget(ChessBoard* chessboard, QWidget *parent)
 
     showBoard=board;
 
-    imgBoard.load("data/chessboard.png");
-    imgChessBlack[0].load("data/chessblack.png");
-    imgChessWhite[0].load("data/chesswhite.png");
-    imgChessBlack[1].load("data/chessblacks.png");
-    imgChessWhite[1].load("data/chesswhites.png");
+    imgBoard.load("://data/chessboard.png");
+    imgChessBlack[0].load("://data/chessblack.png");
+    imgChessWhite[0].load("://data/chesswhite.png");
+    imgChessBlack[1].load("://data/chessblacks.png");
+    imgChessWhite[1].load("://data/chesswhites.png");
 
     penLine.setWidth(2);
     penDot.setWidth(9);

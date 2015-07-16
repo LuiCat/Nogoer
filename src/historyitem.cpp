@@ -9,8 +9,8 @@ HistoryItem::HistoryItem(QObject* parent)
     ,infoHeight(16)
     ,moveHeight(22)
 {
-    imgBlack.load("data/chessblack.png");
-    imgWhite.load("data/chesswhite.png");
+    imgBlack.load("://data/chessblack.png");
+    imgWhite.load("://data/chesswhite.png");
 }
 
 void HistoryItem::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const

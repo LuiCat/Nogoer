@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/data">
+        <file>chessblack.png</file>
+        <file>chessblacks.png</file>
+        <file>chessboard.png</file>
+        <file>chesswhite.png</file>
+        <file>chesswhites.png</file>
+    </qresource>
+</RCC>
