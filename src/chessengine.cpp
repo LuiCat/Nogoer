@@ -107,8 +107,8 @@ void ChessEngine::writeMove(int x, int y)
     {
     default:
         l="move:00";
-        l[5]='0'+x;
-        l[6]='0'+y;
+        l[5]='0'+y;
+        l[6]='0'+x;
         writeLine(l);
         break;
     }
