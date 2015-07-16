@@ -5,18 +5,18 @@
 
 ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog(parent)
 {
-    resize(250, 300);
-    setMinimumSize(250, 300);
+    resize(300, 300);
+    setMinimumSize(300, 300);
     setMaximumWidth(250);
 
     widgetOpen = false;
     titleText = new QLabel(logTitle, this);
     titleText->setGeometry(10, 3, 250, 20);
     mainText = new QPlainTextEdit("", this);
-    mainText->setGeometry(10, 25, 230, height() - 35);
+    mainText->setGeometry(10, 25, 280, height() - 35);
     mainText->setReadOnly(true);
     clearButton = new QPushButton("Clear", this);
-    clearButton->setGeometry(180, 3, 60, 20);
+    clearButton->setGeometry(230, 3, 60, 20);
 
     connect(clearButton, SIGNAL(clicked()), this, SLOT(clearText()));
 }
@@ -47,7 +47,7 @@ void ShowLogWidget::clearText()
 
 void ShowLogWidget::paintEvent(QPaintEvent *)
 {
-    mainText->setGeometry(10, 25, 230, height() - 35);
+    mainText->setGeometry(10, 25, 280, height() - 35);
 }
 
 void ShowLogWidget::showEvent(QShowEvent *)
