@@ -7,7 +7,7 @@ ShowLogWidget::ShowLogWidget(const QString& logTitle, QWidget *parent) : QDialog
 {
     resize(300, 300);
     setMinimumSize(300, 300);
-    setMaximumWidth(250);
+    setMaximumWidth(300);
 
     widgetOpen = false;
     titleText = new QLabel(logTitle, this);
@@ -45,7 +45,7 @@ void ShowLogWidget::clearText()
     mainText->clear();
 }
 
-void ShowLogWidget::paintEvent(QPaintEvent *)
+void ShowLogWidget::resizeEvent(QResizeEvent *)
 {
     mainText->setGeometry(10, 25, 280, height() - 35);
 }

@@ -26,7 +26,7 @@ private:
 
     // QWidget interface
 protected:
-    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
     void showEvent(QShowEvent *);
     void closeEvent(QCloseEvent *);
     // QWidget interface
