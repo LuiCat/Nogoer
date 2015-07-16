@@ -275,6 +275,10 @@ void MainWidget::onEngineExit(bool isCrash)
         widgetHistory->pushHistory("Engine Crashed", 1);
         QMessageBox::critical(this, "", QString("Engine crashed !"));
     }
+    else
+    {
+        widgetHistory->pushHistory("Engine exited", 1);
+    }
     stopGame();
 }
 
