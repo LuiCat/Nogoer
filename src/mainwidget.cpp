@@ -30,8 +30,8 @@ MainWidget::MainWidget(QWidget *parent)
 
     widgetControl = new ControlWidget(this);
 
-    widgetLogBlack = new ShowLogWidget(QString("Black Logs"));
-    widgetLogWhite = new ShowLogWidget(QString("White Logs"));
+    widgetLogBlack = new ShowLogWidget(QString("Black Logs"), this);
+    widgetLogWhite = new ShowLogWidget(QString("White Logs"), this);
 
     connect(widgetChessBoard, SIGNAL(clickGrid(int, int)), this, SLOT(doPlayerMove(int, int)));
     connect(widgetHistory, SIGNAL(showHistory(int, int)), this, SLOT(doShowHistory(int, int)));

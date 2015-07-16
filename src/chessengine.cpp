@@ -152,8 +152,8 @@ void ChessEngine::dealLine()
         default:
             if(line.startsWith("move"))
             {
-                x=line[5]-'0';
-                y=line[6]-'0';
+                x=line[6]-'0';
+                y=line[5]-'0';
                 if(x<0||x>8||y<0||y>8)
                     break;
                 emit moveChess(x, y);
