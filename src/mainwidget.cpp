@@ -277,7 +277,8 @@ void MainWidget::onEngineExit(bool isCrash)
     }
     else
     {
-        widgetHistory->pushHistory("Engine exited", 1);
+        if(!script)
+            widgetHistory->pushHistory("Engine exited", 1);
     }
     stopGame();
 }

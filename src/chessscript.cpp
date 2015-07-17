@@ -22,9 +22,9 @@ int ChessScript::lua_startChess(lua_State* L)
     inst->blackWins=0;
     QString lineFirst, lineSecond;
     if(lua_isstring(L, 2))
-        lineFirst=QString::fromLocal8Bit(lua_tostring(L, 1));
+        lineFirst=QString::fromLocal8Bit(lua_tostring(L, 2));
     if(lua_isstring(L, 3))
-        lineSecond=QString::fromLocal8Bit(lua_tostring(L, 1));
+        lineSecond=QString::fromLocal8Bit(lua_tostring(L, 3));
     while(n--)
         inst->doStartChess(lineFirst, lineSecond);
     lua_pushnumber(L, inst->whiteWins);
