@@ -402,10 +402,11 @@ bool MainWidget::doMove(int x, int y)
     if(chessboard->checkFinished(!playerBlack))
     {
         stopGame();
-        widgetHistory->pushHistory(QString("%0 Win").arg(playerBlack?"BLACK":"WHITE"));
+        int score=chessboard->getMoveNum(playerBlack)*2+1;
+        widgetHistory->pushHistory(QString("%0 Win %1 Points").arg(playerBlack?"BLACK":"WHITE").arg(score));
         if(script)
         {
-            script->increaseWinCount(playerBlack, chessboard->getMoveNum(playerBlack)*2+1);
+            script->increaseWinCount(playerBlack, score);
             script->resume();
         }
         else
