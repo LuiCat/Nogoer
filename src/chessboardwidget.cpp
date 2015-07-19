@@ -48,10 +48,11 @@ ChessBoard* ChessBoardWidget::getChessBoard() const
     return board;
 }
 
-void ChessBoardWidget::setChessBoard(ChessBoard* chessboard)
+void ChessBoardWidget::setChessBoard(ChessBoard* chessboard, int initStep)
 {
     board=chessboard;
     showBoard=board;
+    isNextBlack=!(initStep&1);
     update();
 }
 

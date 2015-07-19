@@ -112,6 +112,7 @@ void MainWidget::stopGame()
     playerEnd(!playerBlack);
     playerEnd(playerBlack);
     gameStarted=false;
+    moveCount=0;
     widgetControl->setGameState(false);
     widgetHistory->pushHistory("Game Stopped");
     chessboard->setFinished();
@@ -295,7 +296,7 @@ void MainWidget::onEngineBlackMove(int x, int y)
         }
         else
         {
-            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
+            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount+1, gameCount);
             stopGame();
         }
     }
@@ -313,7 +314,7 @@ void MainWidget::onEngineWhiteMove(int x, int y)
         }
         else
         {
-            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount, gameCount);
+            widgetHistory->pushHistory(QString().sprintf("%c%d(INVALID)", 'A'+y, x), moveCount+1, gameCount);
             stopGame();
         }
     }

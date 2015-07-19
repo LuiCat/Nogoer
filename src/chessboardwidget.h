@@ -16,7 +16,7 @@ public:
 
     ChessBoard* getChessBoard() const;
 
-    void setChessBoard(ChessBoard* chessboard);
+    void setChessBoard(ChessBoard* chessboard, int initStep=0);
 
     /// Show a chessboard to screen not making modifies to origin chessboard.
     /// Restore with empty parameter or set to null.
